@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('karyawan_id')->constrained('karyawans')->onDelete('cascade');
             $table->foreignId('lokasi_id')->constrained('lokasi_absensis')->onDelete('cascade');
-            $table->string('hari');
+            $table->date('tanggal');
             $table->enum('shift', ['pagi', 'malam']);
             $table->time('jam_masuk');
             $table->time('jam_keluar');

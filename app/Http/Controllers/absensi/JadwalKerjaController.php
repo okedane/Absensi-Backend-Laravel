@@ -1,74 +1,76 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\absensi;
 
+use App\Http\Controllers\Controller;
+use App\Models\Jabatan;
+use App\Models\JadwalKerja;
+use App\Models\Karyawan;
+use App\Models\lokasiAbsensi;
 use Illuminate\Http\Request;
-// use App\Models\JadwalKerja; // Uncomment jika sudah ada model
 
 class JadwalKerjaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $jadwalKerjas = JadwalKerja::orderBy('created_at', 'asc')->get();
-        // return view('jadwal_kerja.index', compact('jadwalKerjas'));
-        return view('jadwal_kerja.index');
+        $JadwalKerja = JadwalKerja::orderBy('created_at', 'asc')->get();
+        $bulan = $request->get('bulan', date('Y-m'));
+        $karyawans = Karyawan::orderBy('created_at', 'asc')->get();
+        $lokasi = lokasiAbsensi::orderBy('created_at', 'asc')->get();
+        return view('absensi.jadwal.index', compact('JadwalKerja', 'bulan', 'karyawans', 'lokasi'));
     }
 
-    public function create()
-    {
-        return view('jadwal_kerja.create');
-    }
 
     public function store(Request $request)
     {
         try {
             $validatedData = $request->validate([
-                'nama_jadwal' => 'required|string|max:255',
-                'hari' => 'required|array',
+                'karyawan_id' => 'required|exists:karyawans,id',
+                'lokasi_id' => 'required|exists:lokasi_absensis,id',
+                'tanggal' => 'required|date',
+                'shift' => 'required|in:pagi,malam',
                 'jam_masuk' => 'required|date_format:H:i',
                 'jam_keluar' => 'required|date_format:H:i',
+                
             ]);
 
-            // JadwalKerja::create($validatedData);
-
-            return redirect()->route('jadwal_kerja.index')->with('success', 'Jadwal kerja berhasil dibuat.');
+            JadwalKerja::create($validatedData);
+            return redirect()->back()->with('success', 'Jadwal kerja berhasil dibuat.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat jadwal kerja. Silakan coba lagi.');
         }
     }
 
-    public function edit($id)
-    {
-        // $jadwalKerja = JadwalKerja::findOrFail($id);
-        return view('jadwal_kerja.edit', compact('id'));
-    }
 
     public function update(Request $request, $id)
     {
         try {
             $validatedData = $request->validate([
-                'nama_jadwal' => 'required|string|max:255',
-                'hari' => 'required|array',
+                'karyawan_id' => 'required|exists:karyawans,id',
+                'lokasi_id' => 'required|exists:lokasi_absensis,id',
+                'tanggal' => 'required|date',
+                'shift' => 'required|string|max:255',
                 'jam_masuk' => 'required|date_format:H:i',
                 'jam_keluar' => 'required|date_format:H:i',
+               
             ]);
 
-            // $jadwalKerja = JadwalKerja::findOrFail($id);
-            // $jadwalKerja->update($validatedData);
+            $jadwalKerja = JadwalKerja::findOrFail($id);
+            $jadwalKerja->update($validatedData);
 
-            return redirect()->route('jadwal_kerja.index')->with('success', 'Jadwal kerja berhasil diperbarui.');
+            return redirect()->back()->with('success', 'Jadwal kerja berhasil diperbarui.');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal kerja. Silakan coba lagi.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal kerja. Silakan coba lagi. ' . $th->getMessage());
         }
     }
 
     public function destroy($id)
     {
         try {
-            // $jadwalKerja = JadwalKerja::findOrFail($id);
-            // $jadwalKerja->delete();
+            $jadwalKerja = JadwalKerja::findOrFail($id);
+            $jadwalKerja->delete();
 
-            return redirect()->route('jadwal_kerja.index')->with('success', 'Jadwal kerja berhasil dihapus.');
+            return redirect()->back()->with('success', 'Jadwal kerja berhasil dihapus.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus jadwal kerja. Silakan coba lagi.');
         }

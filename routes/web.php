@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\absensi\JadwalKerjaController;
 use App\Http\Controllers\absensi\LokasiAbsensiController;
 use App\Http\Controllers\Data\JabatanController;
 use App\Http\Controllers\Data\KaryawanController;
@@ -41,3 +42,10 @@ Route::get('lokasi-absensi', [LokasiAbsensiController::class, 'index'])->name('l
 Route::post('lokasi-absensiStore', [LokasiAbsensiController::class, 'post'])->name('lokasi-absensi.post');
 Route::put('lokasi-absensiPut/{id}', [LokasiAbsensiController::class, 'put'])->name('lokasi-absensi.put');
 Route::delete('lokasi-absensiDelete/{id}', [LokasiAbsensiController::class, 'delete'])->name('lokasi-absensi.delete');
+
+
+Route::get('jadwal-kerja', [JadwalKerjaController::class, 'index'])->name('jadwal-kerja.index');
+Route::post('jadwal-kerjaStore', [JadwalKerjaController::class, 'store'])->name('jadwal-kerja.post');
+Route::put('jadwal-kerjaPut/{id}', [JadwalKerjaController::class, 'update'])->name('jadwal-kerja.put');
+Route::delete('jadwal-kerjaDelete/{id}', [JadwalKerjaController::class, 'destroy'])->name('jadwal-kerja.delete');
+Route::get('jadwal-kerja/{id}', [JadwalKerjaController::class, 'show'])->name('jadwal-kerja.show');

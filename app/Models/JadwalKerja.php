@@ -9,12 +9,12 @@ class JadwalKerja extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'hari',
-        'jam_masuk',
-        'jam_keluar',
         'karyawan_id',
         'lokasi_id',
-        'shift'
+        'tanggal',
+        'shift',
+        'jam_masuk',
+        'jam_keluar',
     ];
     protected $table = 'jadwal_kerjas';
     protected $primaryKey = 'id';

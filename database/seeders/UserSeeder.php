@@ -45,16 +45,6 @@ class UserSeeder extends Seeder
             ],
         ]);
 
-        // \Illuminate\Support\Facades\DB::table('karyawans')->insert([
-        //     [
-        //         'nomor_karyawan' => 'KRY001',
-        //         'foto' => null,
-        //         'tanggal_masuk' => now()->toDateString(),
-        //         'user_id' => 2,
-        //         'jabatan_id' => 1, // Pastikan jabatan_id 1 sudah ada di tabel jabatans
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ]);
+         
     }
 }

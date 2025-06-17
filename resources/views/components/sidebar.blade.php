@@ -41,7 +41,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{ route('jadwal-kerja.index') }}">
                                 <i data-feather="calendar"></i>
                                 Jadwal
                             </a>
