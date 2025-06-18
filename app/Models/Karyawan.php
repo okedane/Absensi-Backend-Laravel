@@ -10,7 +10,7 @@ class Karyawan extends Model
     use HasFactory;
     protected $fillable = [
         'nomor_karyawan',
-        'foto',
+        // 'foto',
         'tanggal_masuk',
         'user_id',
         'jabatan_id',
@@ -24,9 +24,10 @@ class Karyawan extends Model
     }
 
     public function jabatan()
-    {
-        return $this->belongsTo(Jabatan::class);
+        {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
     }
+
     public function absensis()
     {
         return $this->hasMany(Absensi::class, 'karyawan_id');

@@ -15,9 +15,9 @@ class KaryawanController extends Controller
 
     public function index($id)
     {
-        $karyawan = Karyawan::where('id_jabatan', $id)->orderBy('created_at', 'asc')->get();
+        $karyawan = Karyawan::where('jabatan_id', $id)->orderBy('created_at', 'asc')->get();
         $jabatan = Jabatan::findOrFail($id);
-        return view('data.karyawan.index', compact('karyawan', 'jabatan'));
+        return view('data.karyawa.index', compact('karyawan', 'jabatan'));
     }
 
     public function post(Request $request)
@@ -25,11 +25,13 @@ class KaryawanController extends Controller
         try {
 
             $validated = $request->validate([
-                'nomor_karyawan' => 'required|unique:karyawan,nomor_karyawan',
+                'nomor_karyawan' => 'required|unique:karyawans,nomor_karyawan',
+                // 'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'tanggal_masuk' => 'required|date',
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
-                'id_jabatan' => 'required|exists:jabatan,id',
+                'jabatan_id' => 'required|exists:jabatans,id',
             ]);
 
 
@@ -42,7 +44,8 @@ class KaryawanController extends Controller
 
             Karyawan::create([
                 'nomor_karyawan' => $request->nomor_karyawan,
-                'id_jabatan' => $request->id_jabatan,
+                'tanggal_masuk' => $request->tanggal_masuk,
+                'jabatan_id' => $request->jabatan_id,
                 'user_id' => $user->id,
             ]);
 
@@ -57,8 +60,8 @@ class KaryawanController extends Controller
     {
         try {
             $validated = $request->validate([
-                'nomor_karyawan' => 'required|unique:karyawan,nomor_karyawan',
-                'name' => 'required|string|max:255',
+                'nomor_karyawan' => 'required|unique:karyawans,nomor_karyawan',
+                'name'          => 'required|string|max:255',
                 'email'         => 'required|email|unique:users,email,' . $request->user_id,
                 'password'      => 'nullable|min:6',
             ]);
@@ -66,7 +69,7 @@ class KaryawanController extends Controller
             $karyawan = Karyawan::findOrFail($id);
             $karyawan->update([
                 'nomor_karyawan' => $validated['nomor_karyawan'],
-                'name'  => $validated['name'],
+                'tanggal_masuk' => $validated['tanggal_masuk'],
             ]);
 
             $user = $karyawan->user;

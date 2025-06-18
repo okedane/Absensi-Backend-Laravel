@@ -13,13 +13,29 @@ class JadwalKerjaController extends Controller
 {
     public function index(Request $request)
     {
-        $JadwalKerja = JadwalKerja::orderBy('created_at', 'asc')->get();
         $bulan = $request->get('bulan', date('Y-m'));
+        $jabatan = $request->get('jabatan', null);
+
+        $JadwalKerja = JadwalKerja::whereMonth('tanggal', substr($bulan, 5, 2))
+            ->whereYear('tanggal', substr($bulan, 0, 4));
+
+        if ($jabatan) {
+            $JadwalKerja = $JadwalKerja->whereHas('karyawan.jabatan', function($q) use ($jabatan) {
+                $q->where('id', $jabatan);
+            });
+        }
+
+        $JadwalKerja = $JadwalKerja->orderBy('created_at', 'asc')->get();
         $karyawans = Karyawan::orderBy('created_at', 'asc')->get();
         $lokasi = lokasiAbsensi::orderBy('created_at', 'asc')->get();
-        return view('absensi.jadwal.index', compact('JadwalKerja', 'bulan', 'karyawans', 'lokasi'));
+
+        // Ambil daftar jabatan unik
+        $daftarJabatan = \App\Models\Jabatan::orderBy('nama_jabatan')->get();
+
+        return view('absensi.jadwal.index', compact('JadwalKerja', 'bulan', 'karyawans', 'lokasi', 'daftarJabatan', 'jabatan'));
     }
 
+    
 
     public function store(Request $request)
     {
@@ -31,7 +47,7 @@ class JadwalKerjaController extends Controller
                 'shift' => 'required|in:pagi,malam',
                 'jam_masuk' => 'required|date_format:H:i',
                 'jam_keluar' => 'required|date_format:H:i',
-                
+
             ]);
 
             JadwalKerja::create($validatedData);
@@ -52,7 +68,7 @@ class JadwalKerjaController extends Controller
                 'shift' => 'required|string|max:255',
                 'jam_masuk' => 'required|date_format:H:i',
                 'jam_keluar' => 'required|date_format:H:i',
-               
+
             ]);
 
             $jadwalKerja = JadwalKerja::findOrFail($id);

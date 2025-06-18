@@ -36,7 +36,6 @@
                                     <th>Nama</th>
                                     <th>Jabatan</th>
                                     <th>Email</th>
-                                    <th>QR Code</th>
 
                                     <th style="text-align: center; width: 100px;" class="no-export">Action</th>
                                 </tr>
@@ -46,12 +45,9 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->nomor_karyawan }}</td>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->user->name }}</td>
                                         <td>{{ $item->jabatan->nama_jabatan }}</td>
                                         <td>{{ $item->user->email }}</td>
-                                        <td> <img src="{{ asset('qrcodes/' . $item->qr_token . '.svg') }}"
-                                                alt="QR Code">
-                                        </td>
                                         <td style="text-align: center; width: 100px;">
                                             <div class="d-flex justify-content-center gap-2">
 
@@ -101,7 +97,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     Apakah Anda yakin ingin menghapus karyawan
-                                                                    <strong>{{ $item->nama }}</strong>?
+                                                                    <strong>{{ $item->user->name }}</strong>?
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
@@ -144,7 +140,7 @@
                                                                     <div class="modal-body">
                                                                         <div class="mb-3">
                                                                             <label class="form-label"
-                                                                                for="nama">Nama</label>
+                                                                                for="nama">Nomor Karyawan</label>
                                                                             <input type="text" class="form-control"
                                                                                 id="nomor_karyawan"
                                                                                 name="nomor_karyawan"
@@ -152,6 +148,15 @@
                                                                                 required>
                                                                             <div class="invalid-feedback">NK harus
                                                                                 diisi.</div>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label"
+                                                                                for="tanggal_masuk">Tanggal Masuk</label>
+                                                                            <input type="date" class="form-control"
+                                                                                id="tanggal_masuk"
+                                                                                name="tanggal_masuk"
+                                                                                value="{{ $item->tanggal_masuk }}"
+                                                                                required>
                                                                         </div>
                                                                         <!-- Nama -->
                                                                         <div class="mb-3">
@@ -188,6 +193,7 @@
                                                                                 name="password"
                                                                                 placeholder="Biarkan kosong jika tidak ingin mengganti">
                                                                         </div>
+                                                                        <input type="hidden" name="jabatan_id" value="{{ $jabatan->id }}">
 
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -199,7 +205,6 @@
                                                                             Perubahan</button>
                                                                     </div>
                                                                 </form>
-
                                                             </div>
                                                         </div>
                                                     </div><!-- /.modal -->
@@ -252,6 +257,14 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
+                                            <label class="form-label" for="validationCustom01">Tanggal Masuk</label>
+                                            <input type="date" class="form-control" id="validationCustom01"
+                                                placeholder="Masukkan Tanggal Masuk" name="tanggal_masuk" required>
+                                            <div class="invalid-feedback">
+                                                Tanggal masuk harus diisi
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
                                             <label class="form-label" for="validationCustom02">Email</label>
                                             <input type="email" class="form-control" id="validationCustom02"
                                                 placeholder="Masukkan Email" name="email" required>
@@ -267,7 +280,9 @@
                                                 Password harus diisi
                                             </div>
                                         </div>
-                                        <input type="hidden" name="id_jabatan" value="{{ $jabatan->id }}">
+
+                                        <input type="hidden" name="jabatan_id" value="{{ $jabatan->id }}">
+
 
                                         <button class="btn btn-primary" type="submit">Tambah Karyawan</button>
                                     </form>

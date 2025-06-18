@@ -18,18 +18,6 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-Items-center">
-
-                            <form method="GET" action="{{ route('jadwal-kerja.index') }}" class="mb-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="month" name="bulan" value="{{ $bulan }}"
-                                            class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="submit" class="btn btn-primary">Filter</button>
-                                    </div>
-                                </div>
-                            </form>
                             <h4 class="card-title"></h4>
 
                             <button type="button" class="btn btn-primary waves-effect waves-light"
@@ -37,6 +25,24 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <form method="GET" action="{{ route('jadwal-kerja.index') }}" class="row g-3 mb-3">
+                            <div class="col-auto">
+                                <label for="bulan" class="form-label">Bulan</label>
+                                <input type="month" class="form-control" id="bulan" name="bulan" value="{{ $bulan }}">
+                            </div>
+                            <div class="col-auto">
+                                <label for="jabatan" class="form-label">Jabatan</label>
+                                <select class="form-select" id="jabatan" name="jabatan">
+                                    <option value="">Semua Jabatan</option>
+                                    @foreach($daftarJabatan as $j)
+                                        <option value="{{ $j }}" {{ $jabatan == $j ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-auto align-self-end">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </div>
+                        </form>
                         <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                                 <tr>
@@ -148,7 +154,7 @@
                                                                             <label class="form-label"
                                                                                 for="karyawan_id_{{ $item->id }}">Nama
                                                                                 Karyawan</label>
-                                                                            <select class="form-select"
+                                                                            <select class="form-select karyawan-select"
                                                                                 id="karyawan_id_{{ $item->id }}"
                                                                                 name="karyawan_id" required>
                                                                                 <option value="">Pilih Karyawan
@@ -156,6 +162,7 @@
                                                                                 @foreach ($karyawans as $k)
                                                                                     <option
                                                                                         value="{{ $k->id }}"
+                                                                                        data-jabatan="{{ $k->jabatan_id }}"
                                                                                         {{ $item->karyawan_id == $k->id ? 'selected' : '' }}>
                                                                                         {{ $k->user->name }}
                                                                                     </option>
@@ -191,6 +198,22 @@
                                                                                 value="{{ $item->tanggal }}" required>
                                                                             <div class="invalid-feedback">Tanggal harus
                                                                                 diisi.</div>
+                                                                        </div>
+                                                                        <!-- Jabatan -->
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label"
+                                                                                for="jabatan_id_{{ $item->id }}">Jabatan</label>
+                                                                            <select class="form-select jabatan-select"
+                                                                                id="jabatan_id_{{ $item->id }}"
+                                                                                name="jabatan_id" data-item="{{ $item->id }}" required>
+                                                                                <option value="">Pilih Jabatan</option>
+                                                                                @foreach ($daftarJabatan as $j)
+                                                                                    <option value="{{ $j->id }}"
+                                                                                        {{ $item->karyawan->jabatan_id == $j->id ? 'selected' : '' }}>
+                                                                                        {{ $j->nama_jabatan }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
                                                                         </div>
                                                                         {{-- Shift --}}
                                                                         <div class="mb-3">
@@ -279,13 +302,23 @@
                                     <form class="needs-validation" action="{{ route('jadwal-kerja.post') }}"
                                         method="POST" novalidate>
                                         @csrf
+                                        <!-- Jabatan -->
+                                        <div class="mb-3">
+                                            <label class="form-label" for="jabatan_id_create">Jabatan</label>
+                                            <select class="form-select jabatan-select" id="jabatan_id_create" name="jabatan_id" data-item="create" required>
+                                                <option value="">Pilih Jabatan</option>
+                                                @foreach ($daftarJabatan as $j)
+                                                    <option value="{{ $j->id }}">{{ $j->nama_jabatan }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <!-- Nama Karyawan -->
                                         <div class="mb-3">
-                                            <label class="form-label" for="karyawan_id">Nama Karyawan</label>
-                                            <select class="form-select" id="karyawan_id" name="karyawan_id" required>
+                                            <label class="form-label" for="karyawan_id_create">Nama Karyawan</label>
+                                            <select class="form-select karyawan-select" id="karyawan_id_create" name="karyawan_id" required>
                                                 <option value="">Pilih Karyawan</option>
                                                 @foreach ($karyawans as $k)
-                                                    <option value="{{ $k->id }}">{{ $k->user->name }}</option>
+                                                    <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan_id }}">{{ $k->user->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback">Nama karyawan harus dipilih.</div>
@@ -354,3 +387,28 @@
     </div>
 
 </x-app>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.jabatan-select').forEach(function(jabatanSelect) {
+        jabatanSelect.addEventListener('change', function() {
+            var itemId = this.getAttribute('data-item');
+            var selectedJabatan = this.value;
+            var karyawanSelect = document.getElementById('karyawan_id_' + itemId);
+
+            Array.from(karyawanSelect.options).forEach(function(option) {
+                if (option.value === "") {
+                    option.style.display = '';
+                } else if (option.getAttribute('data-jabatan') === selectedJabatan) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Reset karyawan jika jabatan berubah
+            karyawanSelect.value = "";
+        });
+    });
+});
+</script>
