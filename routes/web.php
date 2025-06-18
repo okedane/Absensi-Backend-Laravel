@@ -3,8 +3,7 @@
 use App\Http\Controllers\absensi\JadwalKerjaController;
 use App\Http\Controllers\absensi\LokasiAbsensiController;
 use App\Http\Controllers\Data\JabatanController;
-use App\Http\Controllers\Data\KaryawanController;
-use App\Http\Controllers\IzinController;
+use App\Http\Controllers\absensi\IzinController;
 use Illuminate\Support\Facades\Route;
 
 /*
