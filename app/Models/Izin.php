@@ -15,8 +15,8 @@ class Izin extends Model
         'tanggal_selesai',
         'jenis_izin',
         'alasan',
-        'status',
         'dokumen',
+        'status',
     ];
     protected $table = 'izins';
     protected $primaryKey = 'id';

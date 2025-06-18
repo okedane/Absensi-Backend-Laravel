@@ -53,7 +53,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="" data-key="t-font-awesome">
+                            <a href="{{ route('izin.index') }}" data-key="t-font-awesome">
                                 <i data-feather="user-x"></i>
                                 Izin
                             </a>

@@ -4,6 +4,7 @@ use App\Http\Controllers\absensi\JadwalKerjaController;
 use App\Http\Controllers\absensi\LokasiAbsensiController;
 use App\Http\Controllers\Data\JabatanController;
 use App\Http\Controllers\Data\KaryawanController;
+use App\Http\Controllers\IzinController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,11 +28,15 @@ Route::post('jabatanStore', [JabatanController::class, 'post'])->name('jabatan.p
 Route::put('jabatanPut/{id}', [JabatanController::class, 'put'])->name('jabatan.put');
 Route::delete('jabatanDelete/{id}', [JabatanController::class, 'delete'])->name('jabatan.delete');
 
-Route::get('karyawan/{id}', [KaryawanController::class, 'index'])->name('karyawan.index');
-Route::post('karyawanStore', [KaryawanController::class, 'post'])->name('karyawan.post');
-Route::put('karyawanPut/{id}', [KaryawanController::class, 'put'])->name('karyawan.put');
-Route::delete('karyawanDelete/{id}', [KaryawanController::class, 'delete'])->name('karyawan.delete');
-
+// Routes untuk Jadwal Kerja
+Route::prefix('jadwal-kerja')->group(function () {
+    Route::get('/', [JadwalKerjaController::class, 'index'])->name('jadwal-kerja.index');
+    Route::get('-{id}', [JadwalKerjaController::class, 'show'])->name('jadwal-kerja.show');
+    Route::post('/', [JadwalKerjaController::class, 'store'])->name('jadwal-kerja.post');
+    Route::put('/{id}', [JadwalKerjaController::class, 'update'])->name('jadwal-kerja.put');
+    Route::delete('/{id}', [JadwalKerjaController::class, 'destroy'])->name('jadwal-kerja.delete');
+    Route::delete('/monthly/{karyawanId}/{bulan}', [JadwalKerjaController::class, 'destroyMonthly'])->name('jadwal-kerja.delete-monthly');
+});
 
 Route::get('absensi', [App\Http\Controllers\AbsensiController::class, 'index'])->name('absensi.index');
 Route::post('absensiStore', [App\Http\Controllers\AbsensiController::class, 'post'])->name('absensi.post');
@@ -49,3 +54,6 @@ Route::post('jadwal-kerjaStore', [JadwalKerjaController::class, 'store'])->name(
 Route::put('jadwal-kerjaPut/{id}', [JadwalKerjaController::class, 'update'])->name('jadwal-kerja.put');
 Route::delete('jadwal-kerjaDelete/{id}', [JadwalKerjaController::class, 'destroy'])->name('jadwal-kerja.delete');
 Route::get('jadwal-kerja/{id}', [JadwalKerjaController::class, 'show'])->name('jadwal-kerja.show');
+
+
+Route::get('izin', [IzinController::class, 'index'])->name('izin.index');
