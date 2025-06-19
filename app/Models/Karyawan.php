@@ -10,7 +10,6 @@ class Karyawan extends Model
     use HasFactory;
     protected $fillable = [
         'nomor_karyawan',
-        // 'foto',
         'tanggal_masuk',
         'user_id',
         'jabatan_id',
@@ -43,6 +42,13 @@ class Karyawan extends Model
     }
     public function lokasiAbsensis()
     {
-        return $this->hasMany(LokasiAbsensi::class, 'karyawan_id');
+        return $this->hasManyThrough(
+            LokasiAbsensi::class,
+            JadwalKerja::class,
+            'karyawan_id',
+            'id',
+            'id',
+            'lokasi_id'
+        );
     }
 }

@@ -15,13 +15,19 @@ class Izin extends Model
         'tanggal_selesai',
         'jenis_izin',
         'alasan',
-        'dokumen',
         'status',
+        'dokumen',
     ];
     protected $table = 'izins';
     protected $primaryKey = 'id';
+    
     public function karyawan()
     {
-        return $this->belongsTo(Karyawan::class, 'karyawan_id');
+        return $this->belongsTo(Karyawan::class);
+    }
+
+    public function absensi()
+    {
+        return $this->hasOne(Absensi::class, 'izin_id');
     }
 }

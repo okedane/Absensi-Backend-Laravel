@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Data;
+namespace App\Http\Controllers\Web\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;

@@ -9,10 +9,14 @@ class Absensi extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'tanggal',
-        'jam_masuk',
-        'jam_keluar',
         'karyawan_id',
+        'jadwal_kerja_id',
+        'tanggal',
+        'shift',
+        'jam_absen',
+        'status',
+        'keterlambatan',
+        'izin_id',
     ];
     protected $table = 'absensis';
     protected $primaryKey = 'id';
@@ -29,8 +33,8 @@ class Absensi extends Model
     {
         return $this->belongsTo(JadwalKerja::class, 'jadwal_kerja_id');
     }
-    public function izin()
+     public function izin()
     {
-        return $this->hasMany(Izin::class, 'karyawan_id');
+        return $this->belongsTo(Izin::class, 'izin_id');
     }
 }

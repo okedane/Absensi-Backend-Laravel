@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Absensi;
+namespace App\Http\Controllers\Web\Absensi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;

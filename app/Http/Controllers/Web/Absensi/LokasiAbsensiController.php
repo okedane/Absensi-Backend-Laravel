@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\absensi;
+namespace App\Http\Controllers\Web\Absensi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ class LokasiAbsensiController extends Controller
 {
     public function index()
     {
-        $LokasiRestoran = lokasiAbsensi::orderBy('created_at', 'asc')->get();
+        $LokasiRestoran = LokasiAbsensi::orderBy('created_at', 'asc')->get();
         return view('absensi.mapsKantor.index', compact('LokasiRestoran'));
     }
 
@@ -18,11 +18,12 @@ class LokasiAbsensiController extends Controller
     {
         try {
             $validated = $request->validate([
-                'nama_lokasi'  => 'required',
-                'latitude'      => 'required|numeric',
-                'longitude'     => 'required|numeric',
-                'radius_meter'  => 'required|numeric',  
+                'nama_lokasi'    => 'required|string|max:255',
+                'latitude'       => 'required|numeric|between:-90,90',
+                'longitude'      => 'required|numeric|between:-180,180',
+                'radius_meter'   => 'required|numeric|min:1',
             ]);
+
 
             lokasiAbsensi::create($validated);
             return redirect()->back()->with('success', 'Lokasi berhasil di tambahkan');
@@ -35,11 +36,12 @@ class LokasiAbsensiController extends Controller
     {
         try {
             $validated = $request->validate([
-                'nama_lokasi'               => 'required',
-                'latitude'                  => 'required|numeric',
-                'longitude'                 => 'required|numeric',
-                'radius_meter'              => 'required|numeric',
+                'nama_lokasi'    => 'required|string|max:255',
+                'latitude'       => 'required|numeric|between:-90,90',
+                'longitude'      => 'required|numeric|between:-180,180',
+                'radius_meter'   => 'required|numeric|min:1',
             ]);
+
 
             $LokasiRestoran = lokasiAbsensi::findOrFail($id);
             $LokasiRestoran->update($validated);

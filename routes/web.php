@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\absensi\JadwalKerjaController;
-use App\Http\Controllers\absensi\LokasiAbsensiController;
-use App\Http\Controllers\Data\JabatanController;
-use App\Http\Controllers\absensi\IzinController;
-use App\Http\Controllers\Absensi\LemburController;
+use App\Http\Controllers\Web\Absensi\AbsensiController;
+use App\Http\Controllers\Web\Absensi\IzinController;
+use App\Http\Controllers\Web\Absensi\JadwalKerjaController;
+use App\Http\Controllers\Web\Absensi\LemburController;
+use App\Http\Controllers\Web\Absensi\LokasiAbsensiController;
+use App\Http\Controllers\Web\Data\JabatanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\Data\KaryawanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,11 @@ Route::post('jabatanStore', [JabatanController::class, 'post'])->name('jabatan.p
 Route::put('jabatanPut/{id}', [JabatanController::class, 'put'])->name('jabatan.put');
 Route::delete('jabatanDelete/{id}', [JabatanController::class, 'delete'])->name('jabatan.delete');
 
+Route::get('karyawan/{jabatan_id}', [KaryawanController::class, 'index'])->name('karyawan.index');
+Route::post('karyawanStore', [KaryawanController::class, 'post'])->name('karyawan.post');
+Route::put('karyawanPut/{id}', [KaryawanController::class, 'put'])->name('karyawan.put');
+Route::delete('karyawanDelete/{id}', [KaryawanController::class, 'delete'])->name('karyawan.delete');
+
 // Routes untuk Jadwal Kerja
 Route::prefix('jadwal-kerja')->group(function () {
     Route::get('/', [JadwalKerjaController::class, 'index'])->name('jadwal-kerja.index');
@@ -38,10 +45,10 @@ Route::prefix('jadwal-kerja')->group(function () {
     Route::delete('/monthly/{karyawanId}/{bulan}', [JadwalKerjaController::class, 'destroyMonthly'])->name('jadwal-kerja.delete-monthly');
 });
 
-Route::get('absensi', [App\Http\Controllers\AbsensiController::class, 'index'])->name('absensi.index');
-Route::post('absensiStore', [App\Http\Controllers\AbsensiController::class, 'post'])->name('absensi.post');
-Route::put('absensiPut/{id}', [App\Http\Controllers\AbsensiController::class, 'put'])->name('absensi.put');
-Route::delete('absensiDelete/{id}', [App\Http\Controllers\AbsensiController::class, 'delete'])->name('absensi.delete'); 
+Route::get('absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+Route::post('absensiStore', [AbsensiController::class, 'post'])->name('absensi.post');
+Route::put('absensiPut/{id}', [AbsensiController::class, 'put'])->name('absensi.put');
+Route::delete('absensiDelete/{id}', [AbsensiController::class, 'delete'])->name('absensi.delete'); 
 
 Route::get('lokasi-absensi', [LokasiAbsensiController::class, 'index'])->name('lokasi-absensi.index');
 Route::post('lokasi-absensiStore', [LokasiAbsensiController::class, 'post'])->name('lokasi-absensi.post');
@@ -58,6 +65,8 @@ Route::get('jadwal-kerja/{id}', [JadwalKerjaController::class, 'show'])->name('j
 
 Route::get('izin', [IzinController::class, 'index'])->name('izin.index');
 Route::patch('/izin/{id}/status', [IzinController::class, 'updateStatus'])->name('izin.updateStatus');
+
+Route::get('absensi', [AbsensiController::class, 'index'])->name('absensi.index');
 
 
 Route::get('lembur', [LemburController::class, 'index'])->name('lembur.index');

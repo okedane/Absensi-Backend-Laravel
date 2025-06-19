@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Jabatan : {{ $jabatan->nama_jabatan }}</h4>
+                        <h4 class="mb-sm-0 font-size-18">Daftar Karyawan</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('jabatan.index') }}">Jabatan</a></li>
                                 <li class="breadcrumb-item active">karyawan</li>
                             </ol>
                         </div>
@@ -19,12 +19,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-Items-center">
-
-                            <h4 class="card-title"></h4>
-
-                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                data-bs-toggle="modal" data-bs-target="#myModal">Create</button>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Jabatan {{ $jabatan->nama_jabatan }}</h5>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+                                <i class="mdi mdi-plus"></i> Tambah Karyawan
+                            </button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -61,13 +60,6 @@
                                                         <i class="mdi mdi-pencil font-size-16 align-middle"></i>
                                                     </button>
 
-                                                    <button type="button" data-bs-toggle="modal"
-                                                        data-bs-target="#showModal{{ $item->id }}"
-                                                        class="btn btn-soft-primary waves-effect waves-light"
-                                                        style="padding: 3px 6px;">
-                                                        <i class="mdi mdi-eye font-size-16 align-middle"></i>
-                                                    </button>
-                                                    <!-- Tombol Delete -->
                                                     <!-- Tombol Delete dengan Modal Konfirmasi -->
                                                     <form action="{{ route('karyawan.delete', $item->id) }}"
                                                         method="POST" id="deleteForm{{ $item->id }}">
@@ -109,10 +101,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </td>
-
                                     </tr>
                                     <div class="row">
                                         <div class="col-lg-6">

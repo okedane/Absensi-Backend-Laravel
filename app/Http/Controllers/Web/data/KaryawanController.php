@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Data;
+namespace App\Http\Controllers\Web\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use App\Models\Karyawan;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Unique;
 
 class KaryawanController extends Controller
 {
