@@ -20,7 +20,6 @@ class KaryawanSeeder extends Seeder
         DB::table('karyawans')->insert([
             [
                 'nomor_karyawan' => 'KRY001',
-                'foto' => null,
                 'tanggal_masuk' => '2024-01-10',
                 'user_id' => 1,
                 'jabatan_id' => 1,
@@ -29,7 +28,6 @@ class KaryawanSeeder extends Seeder
             ],
             [
                 'nomor_karyawan' => 'KRY002',
-                'foto' => null,
                 'tanggal_masuk' => '2024-02-15',
                 'user_id' => 2,
                 'jabatan_id' => 2,
@@ -38,7 +36,6 @@ class KaryawanSeeder extends Seeder
             ],
             [
                 'nomor_karyawan' => 'KRY003',
-                'foto' => null,
                 'tanggal_masuk' => '2024-03-20',
                 'user_id' => 3,
                 'jabatan_id' => 1,

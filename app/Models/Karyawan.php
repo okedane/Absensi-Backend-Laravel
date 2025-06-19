@@ -24,13 +24,18 @@ class Karyawan extends Model
     }
 
     public function jabatan()
-        {
+    {
         return $this->belongsTo(Jabatan::class, 'jabatan_id');
     }
 
     public function absensis()
     {
         return $this->hasMany(Absensi::class, 'karyawan_id');
+    }
+
+    public function izins()
+    {
+        return $this->hasMany(Izin::class, 'karyawan_id');
     }
     public function jadwalKerjas()
     {

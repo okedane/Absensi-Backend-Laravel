@@ -13,4 +13,13 @@ class IzinController extends Controller
         $izins = Izin::orderBy('created_at', 'asc')->get();
         return view('absensi.izin.index', compact('izins'));
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $izin = Izin::findOrFail($id);
+        $izin->status = $request->status;
+        $izin->save();
+
+        return back()->with('success', 'Status izin berhasil diperbarui.');
+    }
 }

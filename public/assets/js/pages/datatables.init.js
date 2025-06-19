@@ -11,23 +11,23 @@ $(document).ready(function () {
         extend: "copy",
         text: "Copy",
         exportOptions: {
-          columns: ":not(.no-export)"
+          columns: ":not(:last-child)"
         }
       },
       {
         extend: "excel",
-        text: "Export Excel",
+        text: "Excel",
         exportOptions: {
-          columns: ":not(.no-export)"
+          columns: ":not(:last-child)"
         }
       },
       {
         extend: "pdf",
-        text: "Export PDF",
+        text: "PDF",
         orientation: "landscape", // Ubah ke landscape agar lebih luas
         pageSize: "A4", // Sesuaikan ukuran kertas
         exportOptions: {
-          columns: ":not(.no-export)"
+          columns: ":not(:last-child)"
         }
       },
       "colvis"

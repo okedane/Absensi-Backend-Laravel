@@ -22,7 +22,6 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{ route('jabatan.index') }}">Jabatan</a></li>
-                        <li><a href="" data-key="t-dripicons">Lembur</a></li>
                         <li><a href="" data-key="t-font-awesome">Pelanggaran</a></li>
                     </ul>
                 </li>
@@ -59,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="" data-key="t-font-awesome">
+                            <a href="{{ route('lembur.index') }}" data-key="t-font-awesome">
                                 <i data-feather="user-plus"></i>
                                 Lembur
                             </a>

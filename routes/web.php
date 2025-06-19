@@ -4,6 +4,7 @@ use App\Http\Controllers\absensi\JadwalKerjaController;
 use App\Http\Controllers\absensi\LokasiAbsensiController;
 use App\Http\Controllers\Data\JabatanController;
 use App\Http\Controllers\absensi\IzinController;
+use App\Http\Controllers\Absensi\LemburController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,3 +57,11 @@ Route::get('jadwal-kerja/{id}', [JadwalKerjaController::class, 'show'])->name('j
 
 
 Route::get('izin', [IzinController::class, 'index'])->name('izin.index');
+Route::patch('/izin/{id}/status', [IzinController::class, 'updateStatus'])->name('izin.updateStatus');
+
+
+Route::get('lembur', [LemburController::class, 'index'])->name('lembur.index');
+Route::get('/get-karyawan-by-jabatan/{jabatan_id}', [LemburController::class, 'getKaryawanByJabatan'])->name('karyawan.by.jabatan');
+Route::post('lemburStore', [LemburController::class, 'store'])->name('lembur.store');
+Route::put('lemburPut/{id}', [LemburController::class, 'update'])->name('lembur.update');
+Route::delete('lemburDelete/{id}', [LemburController::class, 'delete'])->name('lembur.delete');

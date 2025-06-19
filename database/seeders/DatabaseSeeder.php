@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             JabatanSeeder::class,
             KaryawanSeeder::class,
             LokasiSeeder::class,
+            IzinSeeder::class,
             // JadwalKerjaSeeder::class,
             // AbsensiSeeder::class,
         ]);
