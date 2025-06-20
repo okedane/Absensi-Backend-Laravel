@@ -26,7 +26,7 @@
                                     <th>NK</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
-                                    <th>Bulan</th>
+                                   
                                     <th style="text-align: center; width: 100px;" class="no-export">Action</th>
                                 </tr>
                             </thead>
@@ -37,11 +37,16 @@
                                         <td>{{ $item->karyawan->nomor_karyawan }}</td>
                                         <td>{{ $item->karyawan->user->name }}</td>
                                         <td>{{ $item->karyawan->jabatan->nama_jabatan }}</td>
+                                       
                                         <td style="text-align: center; width: 100px;">
                                             <div class="d-flex justify-content-center gap-2">
                                                 <!-- Gunakan div container untuk menyusun tombol secara horizontal -->
                                                 <div class="d-flex align-items-center gap-2">
-                                                  
+                                                <a href=""
+                                                    class="btn btn-soft-info waves-effect waves-light"
+                                                    style="padding: 3px 6px;" title="Lihat Jadwal Kerja">
+                                                     <i class="mdi mdi-eye font-size-16 align-middle"></i>
+                                                </a>
                                                 </div>
 
                                             </div>

@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
         \Illuminate\Support\Facades\DB::table('users')->insert([
             [
                 'name' => 'Admin',
-                'email' => 'admin@example.com',
-                'password' => bcrypt('password'),
+                'email' => 'admin@gmai.com',
+                'password' => bcrypt('12345678'),
                 'role' => 'admin',
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),
@@ -25,8 +25,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Karyawan Satu',
-                'email' => 'karyawan1@example.com',
-                'password' => bcrypt('password'),
+                'email' => 'karyawan1@gmai.com',
+                'password' => bcrypt('12345678'),
                 'role' => 'karyawan',
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),
@@ -35,8 +35,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Karyawan Dua',
-                'email' => 'karyawan2@example.com',
-                'password' => bcrypt('password'),
+                'email' => 'karyawan2@gmai.com',
+                'password' => bcrypt('12345678'),
                 'role' => 'karyawan',
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),

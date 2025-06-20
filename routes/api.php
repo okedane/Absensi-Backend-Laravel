@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\Absensi\JadwalKerjaController;
+use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Absensi\AbsensiController;
+use App\Http\Controllers\API\Absensi\IzinController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +20,24 @@ use Illuminate\Support\Facades\Route;
 
 // logo-sm.svg
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', [AuthController::class, 'login']);
+
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    //Jadwal
+    Route::get('/jadwal-kerja', [JadwalKerjaController::class, 'index']);
+    Route::get('/jadwal-kerja/hari-ini', [JadwalKerjaController::class, 'jadwalHariIni']);
+    //Absensi
+    //  Route::get('/absensi', [AbsensiController::class, 'index']);
+    Route::post('/absensi', [AbsensiController::class, 'store']);
+    // Route::get('/absen/history', [AbsensiController::class, 'history']);
+    Route::post('/izin', [IzinController::class, 'store']);
 });

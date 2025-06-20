@@ -18,10 +18,9 @@ return new class extends Migration
             $table->foreignId('izin_id')->nullable()->constrained()->onDelete('set null');
             $table->date('tanggal');
             $table->enum('shift', ['pagi', 'malam']);
-            $table->time('jam_absen');
+            $table->time('jam_absen')->nullable();
             $table->enum('status', ['tepat waktu', 'terlambat', 'izin']);
-            $table->time('keterlambatan')->nullable();
-            
+            $table->integer('keterlambatan')->nullable();
             $table->timestamps();
         });
     }
