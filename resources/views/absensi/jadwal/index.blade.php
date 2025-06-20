@@ -23,22 +23,28 @@
                                 data-bs-toggle="modal" data-bs-target="#myModal">Create</button>
                         </div>
                         <div class="card-body">
-                            <form method="GET" action="{{ route('jadwal-kerja.index') }}" class="row g-3 mb-4 align-items-end">
+                            <form method="GET" action="{{ route('jadwal-kerja.index') }}"
+                                class="row g-3 mb-4 align-items-end">
                                 <div class="col-md-4">
                                     <label for="bulan" class="form-label fw-semibold">Bulan</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="mdi mdi-calendar-month"></i></span>
-                                        <input type="month" class="form-control" id="bulan" name="bulan" value="{{ $bulan }}">
+                                        <span class="input-group-text bg-light"><i
+                                                class="mdi mdi-calendar-month"></i></span>
+                                        <input type="month" class="form-control" id="bulan" name="bulan"
+                                            value="{{ $bulan }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="jabatan" class="form-label fw-semibold">Jabatan</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="mdi mdi-account-tie"></i></span>
+                                        <span class="input-group-text bg-light"><i
+                                                class="mdi mdi-account-tie"></i></span>
                                         <select class="form-select" id="jabatan" name="jabatan">
                                             <option value="">Semua Jabatan</option>
-                                            @foreach($daftarJabatan as $j)
-                                                <option value="{{ $j->id }}" {{ $jabatan == $j->id ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                                            @foreach ($daftarJabatan as $j)
+                                                <option value="{{ $j->id }}"
+                                                    {{ $jabatan == $j->id ? 'selected' : '' }}>{{ $j->nama_jabatan }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -66,7 +72,10 @@
                                     @foreach ($JadwalKerja as $item)
                                         @php
                                             // Hitung total hari kerja untuk karyawan dalam bulan ini
-                                            $totalHariKerja = \App\Models\JadwalKerja::where('karyawan_id', $item->karyawan_id)
+                                            $totalHariKerja = \App\Models\JadwalKerja::where(
+                                                'karyawan_id',
+                                                $item->karyawan_id,
+                                            )
                                                 ->whereMonth('tanggal', substr($item->bulan, 5, 2))
                                                 ->whereYear('tanggal', substr($item->bulan, 0, 4))
                                                 ->count();
@@ -106,7 +115,8 @@
                                                         <button type="button" style="padding: 3px 6px;"
                                                             class="btn btn-soft-danger waves-effect waves-light"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
+                                                            data-bs-target="#deleteModal{{ $item->id }}"
+                                                            title="Hapus">
                                                             <i class="mdi mdi-trash-can font-size-16 align-middle"></i>
                                                         </button>
                                                     </form>
@@ -126,12 +136,14 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     Apakah Anda yakin ingin menghapus Jadwal Kerja untuk
-                                                                    <strong>{{ $item->karyawan->user->name }}</strong> 
-                                                                    bulan <strong>{{ \Carbon\Carbon::parse($item->bulan . '-01')->format('F Y') }}</strong>?
+                                                                    <strong>{{ $item->karyawan->user->name }}</strong>
+                                                                    bulan
+                                                                    <strong>{{ \Carbon\Carbon::parse($item->bulan . '-01')->format('F Y') }}</strong>?
                                                                     <br><br>
                                                                     <small class="text-warning">
                                                                         <i class="mdi mdi-alert-circle"></i>
-                                                                        Ini akan menghapus semua jadwal kerja untuk karyawan ini dalam bulan tersebut.
+                                                                        Ini akan menghapus semua jadwal kerja untuk
+                                                                        karyawan ini dalam bulan tersebut.
                                                                     </small>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -148,14 +160,14 @@
                                         </tr>
 
                                         <!-- Edit Modal -->
-                                        <div id="editModal{{ $item->id }}" class="modal fade"
-                                            tabindex="-1" aria-labelledby="editModalLabel"
-                                            aria-hidden="true" data-bs-scroll="true"
+                                        <div id="editModal{{ $item->id }}" class="modal fade" tabindex="-1"
+                                            aria-labelledby="editModalLabel" aria-hidden="true" data-bs-scroll="true"
                                             data-bs-backdrop="static">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Edit Data Jadwal Kerja</h5>
+                                                        <h5 class="modal-title" id="editModalLabel">Edit Data Jadwal
+                                                            Kerja</h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
@@ -168,7 +180,8 @@
                                                             <!-- Nama Karyawan -->
                                                             <div class="mb-3">
                                                                 <label class="form-label"
-                                                                    for="karyawan_id_{{ $item->id }}">Nama Karyawan</label>
+                                                                    for="karyawan_id_{{ $item->id }}">Nama
+                                                                    Karyawan</label>
                                                                 <select class="form-select karyawan-select"
                                                                     id="karyawan_id_{{ $item->id }}"
                                                                     name="karyawan_id" required>
@@ -185,7 +198,8 @@
                                                             <!-- Nama Lokasi -->
                                                             <div class="mb-3">
                                                                 <label class="form-label"
-                                                                    for="lokasi_id_{{ $item->id }}">Nama Lokasi</label>
+                                                                    for="lokasi_id_{{ $item->id }}">Nama
+                                                                    Lokasi</label>
                                                                 <select class="form-select"
                                                                     id="lokasi_id_{{ $item->id }}"
                                                                     name="lokasi_id" required>
@@ -203,18 +217,18 @@
                                                                 <label class="form-label"
                                                                     for="tanggal_{{ $item->id }}">Tanggal</label>
                                                                 <input type="date" class="form-control"
-                                                                    id="tanggal_{{ $item->id }}"
-                                                                    name="tanggal"
+                                                                    id="tanggal_{{ $item->id }}" name="tanggal"
                                                                     value="{{ $item->tanggal }}" required>
-                                                                <div class="invalid-feedback">Tanggal harus diisi.</div>
+                                                                <div class="invalid-feedback">Tanggal harus diisi.
+                                                                </div>
                                                             </div>
                                                             <!-- Shift -->
                                                             <div class="mb-3">
                                                                 <label class="form-label"
                                                                     for="shift_{{ $item->id }}">Shift</label>
                                                                 <select class="form-select"
-                                                                    id="shift_{{ $item->id }}"
-                                                                    name="shift" required>
+                                                                    id="shift_{{ $item->id }}" name="shift"
+                                                                    required>
                                                                     <option value="">Pilih Shift</option>
                                                                     <option value="pagi"
                                                                         {{ $item->shift == 'pagi' ? 'selected' : '' }}>
@@ -223,12 +237,14 @@
                                                                         {{ $item->shift == 'malam' ? 'selected' : '' }}>
                                                                         Malam</option>
                                                                 </select>
-                                                                <div class="invalid-feedback">Shift harus dipilih.</div>
+                                                                <div class="invalid-feedback">Shift harus dipilih.
+                                                                </div>
                                                             </div>
                                                             <!-- Jam Masuk -->
                                                             <div class="mb-3">
                                                                 <label class="form-label"
-                                                                    for="jam_masuk_{{ $item->id }}">Jam Masuk</label>
+                                                                    for="jam_masuk_{{ $item->id }}">Jam
+                                                                    Masuk</label>
                                                                 <input type="time" class="form-control"
                                                                     id="jam_masuk_{{ $item->id }}"
                                                                     name="jam_masuk"
@@ -238,19 +254,22 @@
                                                             <!-- Jam Keluar -->
                                                             <div class="mb-3">
                                                                 <label class="form-label"
-                                                                    for="jam_keluar_{{ $item->id }}">Jam Keluar</label>
+                                                                    for="jam_keluar_{{ $item->id }}">Jam
+                                                                    Keluar</label>
                                                                 <input type="time" class="form-control"
                                                                     id="jam_keluar_{{ $item->id }}"
                                                                     name="jam_keluar"
                                                                     value="{{ old('jam_keluar', \Carbon\Carbon::parse($item->jam_keluar)->format('H:i')) }}"
                                                                     required>
-                                                                <div class="invalid-feedback">Jam keluar harus diisi.</div>
+                                                                <div class="invalid-feedback">Jam keluar harus diisi.
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Tutup</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan
+                                                                Perubahan</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -267,8 +286,8 @@
     </div>
 
     <!-- Create Modal -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel"
-        aria-hidden="true" data-bs-scroll="true" data-bs-backdrop="static">
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        data-bs-scroll="true" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -276,13 +295,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="needs-validation" action="{{ route('jadwal-kerja.post') }}"
-                        method="POST" novalidate>
+                    <form class="needs-validation" action="{{ route('jadwal-kerja.post') }}" method="POST"
+                        novalidate>
                         @csrf
                         <!-- Jabatan -->
                         <div class="mb-3">
                             <label class="form-label" for="jabatan_id_create">Jabatan</label>
-                            <select class="form-select jabatan-select" id="jabatan_id_create" name="jabatan_id" data-item="create" required>
+                            <select class="form-select jabatan-select" id="jabatan_id_create" name="jabatan_id"
+                                data-item="create" required>
                                 <option value="">Pilih Jabatan</option>
                                 @foreach ($daftarJabatan as $j)
                                     <option value="{{ $j->id }}">{{ $j->nama_jabatan }}</option>
@@ -292,10 +312,12 @@
                         <!-- Nama Karyawan -->
                         <div class="mb-3">
                             <label class="form-label" for="karyawan_id_create">Nama Karyawan</label>
-                            <select class="form-select karyawan-select" id="karyawan_id_create" name="karyawan_id" required>
+                            <select class="form-select karyawan-select" id="karyawan_id_create" name="karyawan_id"
+                                required>
                                 <option value="">Pilih Karyawan</option>
                                 @foreach ($karyawans as $k)
-                                    <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan_id }}">{{ $k->user->name }}</option>
+                                    <option value="{{ $k->id }}" data-jabatan="{{ $k->jabatan_id }}">
+                                        {{ $k->user->name }}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Nama karyawan harus dipilih.</div>
@@ -316,13 +338,12 @@
                             <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                             <div class="invalid-feedback">Tanggal harus diisi.</div>
                         </div>
-                        <!-- Shift -->
                         <div class="mb-3">
                             <label class="form-label" for="shift">Shift</label>
                             <select class="form-select" id="shift" name="shift" required>
                                 <option value="">Pilih Shift</option>
-                                <option value="pagi">Pagi</option>
-                                <option value="malam">Malam</option>
+                                <option value="pagi">Pagi (07:00 - 15:00)</option>
+                                <option value="malam">Malam (15:00 - 21:00)</option>
                             </select>
                             <div class="invalid-feedback">Shift harus dipilih.</div>
                         </div>
@@ -343,29 +364,68 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto set jam masuk dan jam keluar berdasarkan shift
+        document.getElementById('shift').addEventListener('change', function() {
+            const shift = this.value;
+            const jamMasuk = document.getElementById('jam_masuk');
+            const jamKeluar = document.getElementById('jam_keluar');
+
+            if (shift === 'pagi') {
+                jamMasuk.value = '07:00';
+                jamKeluar.value = '15:00';
+            } else if (shift === 'malam') {
+                jamMasuk.value = '15:00';
+                jamKeluar.value = '21:00';
+            } else {
+                // Reset jika tidak memilih shift
+                jamMasuk.value = '';
+                jamKeluar.value = '';
+            }
+        });
+
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </x-app>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.jabatan-select').forEach(function(jabatanSelect) {
-        jabatanSelect.addEventListener('change', function() {
-            var itemId = this.getAttribute('data-item');
-            var selectedJabatan = this.value;
-            var karyawanSelect = document.getElementById('karyawan_id_' + itemId);
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.jabatan-select').forEach(function(jabatanSelect) {
+            jabatanSelect.addEventListener('change', function() {
+                var itemId = this.getAttribute('data-item');
+                var selectedJabatan = this.value;
+                var karyawanSelect = document.getElementById('karyawan_id_' + itemId);
 
-            Array.from(karyawanSelect.options).forEach(function(option) {
-                if (option.value === "") {
-                    option.style.display = '';
-                } else if (option.getAttribute('data-jabatan') === selectedJabatan) {
-                    option.style.display = '';
-                } else {
-                    option.style.display = 'none';
-                }
+                Array.from(karyawanSelect.options).forEach(function(option) {
+                    if (option.value === "") {
+                        option.style.display = '';
+                    } else if (option.getAttribute('data-jabatan') ===
+                        selectedJabatan) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+
+                // Reset karyawan jika jabatan berubah
+                karyawanSelect.value = "";
             });
-
-            // Reset karyawan jika jabatan berubah
-            karyawanSelect.value = "";
         });
     });
-});
 </script>

@@ -38,6 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     //Absensi
     //  Route::get('/absensi', [AbsensiController::class, 'index']);
     Route::post('/absensi', [AbsensiController::class, 'store']);
-    // Route::get('/absen/history', [AbsensiController::class, 'history']);
+     Route::get('/absensi/history', [AbsensiController::class, 'history']);
     Route::post('/izin', [IzinController::class, 'store']);
 });

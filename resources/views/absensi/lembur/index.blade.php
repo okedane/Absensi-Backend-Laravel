@@ -15,329 +15,189 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Filter Section -->
-            <div class="row mb-4">
+            <div class="row mb-3">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Filter Data Lembur</h4>
-                        </div>
                         <div class="card-body">
-                            <form action="{{ route('lembur.index') }}" method="GET" class="row g-3">
-                                <div class="col-md-4">
-                                    <label for="bulan" class="form-label">Periode Bulan</label>
-                                    <input type="month" class="form-control" id="bulan" name="bulan" value="{{ $monthInput ?? date('Y-m') }}">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <form method="GET" action="{{ route('lembur.index') }}" class="d-flex gap-2">
+                                        <select name="jabatan" class="form-select">
+                                            <option value="">Semua Jabatan</option>
+                                            @foreach($jabatans as $jabatan)
+                                                <option value="{{ $jabatan->id }}" 
+                                                    {{ $sortJabatan == $jabatan->id ? 'selected' : '' }}>
+                                                    {{ $jabatan->nama_jabatan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="id_jabatan" class="form-label">Jabatan</label>
-                                    <select class="form-select" id="id_jabatan" name="id_jabatan">
-                                        <option value="">Semua Jabatan</option>
-                                        @foreach ($jabatan as $j)
-                                            <option value="{{ $j->id }}" {{ $jabatanId == $j->id ? 'selected' : '' }}>
-                                                {{ $j->nama_jabatan }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-3">
+                                        <select name="bulan" class="form-select">
+                                            <option value="">Semua Bulan</option>
+                                            @foreach($bulans as $key => $bulan)
+                                                <option value="{{ $key }}" 
+                                                    {{ $sortBulan == $key ? 'selected' : '' }}>
+                                                    {{ $bulan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                 </div>
-                                <div class="col-md-4 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary me-2">Terapkan Filter</button>
-                                    <a href="{{ route('lembur.index') }}" class="btn btn-secondary">Reset</a>
+                                <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary me-2">Filter</button>
+                                        <a href="{{ route('lembur.index') }}" class="btn btn-secondary">Reset</a>
+                                    </form>
                                 </div>
-                            </form>
+                                <div class="col-md-3 text-end">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">
+                                        <i class="mdi mdi-plus"></i> Tambah Lembur
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
+            {{-- <!-- Alert Messages -->
+            @if(session('success'))
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                </div>
+            @endif --}}
+
+            <!-- Data Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-Items-center">
-                            <div>
-                                <h4 class="card-title mb-0">Data Lembur</h4>
-                                <p class="text-muted mb-0">
-                                    <span class="badge bg-info">Total: {{ count($lemburs) }} data</span>
-                                    @if($jabatanId)
-                                        <span class="badge bg-primary">Jabatan: {{ $jabatan->where('id', $jabatanId)->first()->nama_jabatan }}</span>
-                                    @endif
-                                    <span class="badge bg-success">Periode: {{ isset($monthInput) ? \Carbon\Carbon::parse($monthInput)->format('F Y') : 'Semua Waktu' }}</span>
-                                </p>
-                            </div>
-                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                data-bs-toggle="modal" data-bs-target="#myModal">Tambah Data</button>
-                        </div>
-
-                    </div>
-                    <div class="card-body">
-                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Karyawan</th>
-                                    <th>Jabatan</th>
-                                    <th>Tanggal</th>
-                                    <th>Jam Mulai</th>
-                                    <th>Jam Selesai</th>
-                                    <th>Total Jam</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($lemburs as $index => $lembur)
+                        <div class="card-body">
+                            <table class="table table-bordered dt-responsive nowrap w-100">
+                                <thead>
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $lembur->karyawan->user->name ?? '-' }}</td>
-                                        <td>{{ $lembur->karyawan->jabatan->nama_jabatan ?? '-' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($lembur->tanggal)->format('d-m-Y') }}</td>
-                                        <td>{{ $lembur->jam_mulai }}</td>
-                                        <td>{{ $lembur->jam_selesai }}</td>
-                                        <td>{{ $lembur->total_jam }}</td>
-                                        <td style="text-align: center; width: 100px;">
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <!-- Gunakan div container untuk menyusun tombol secara horizontal -->
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <button type="button"
-                                                        data-bs-target="#editModal{{ $lembur->id }}"
-                                                        data-bs-toggle="modal"
-                                                        class="btn btn-soft-primary waves-effect waves-light"
-                                                        style="padding: 3px 6px;">
-                                                        <i class="mdi mdi-pencil font-size-16 align-middle"></i>
+                                        <th style="width:20px">No</th>
+                                        <th>Nama Karyawan</th>
+                                        <th>Jabatan</th>
+                                        <th>Tanggal</th>
+                                        <th>Jam Mulai</th>
+                                        <th>Jam Selesai</th>
+                                        <th>Total Jam</th>
+                                        <th style="text-align: center; width: 120px;" class="no-export">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($lemburs as $item)
+                                        <tr>
+                                            <td class="align-middle text-center">{{ $loop->iteration }}</td>
+                                            <td class="align-middle">{{ $item->karyawan->user->name }}</td>
+                                            <td class="align-middle">
+                                                <span class="badge badge-soft-secondary">
+                                                    {{ $item->karyawan->jabatan->nama_jabatan }}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle">{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}</td>
+                                            <td class="align-middle">{{ \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') }}</td>
+                                            <td class="align-middle">{{ \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') }}</td>
+                                            <td class="align-middle">
+                                                <span class="badge badge-soft-primary">{{ $item->total_jam }} jam</span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button type="button" class="btn btn-soft-info btn-sm" 
+                                                        onclick="showDetail({{ $item->id }})" title="Detail">
+                                                        <i class="mdi mdi-eye"></i>
                                                     </button>
-
-                                                    <form action="{{ route('lembur.delete', $lembur->id) }}"
-                                                        method="POST" id="deleteForm{{ $lembur->id }}">
+                                                    <button type="button" class="btn btn-soft-warning btn-sm" 
+                                                        onclick="editLembur({{ $item->id }})" title="Edit">
+                                                        <i class="mdi mdi-pencil"></i>
+                                                    </button>
+                                                    <form action="{{ route('lembur.destroy', $item->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" style="padding: 3px 6px;"
-                                                            class="btn btn-soft-danger waves-effect waves-light"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal{{ $lembur->id }}">
-                                                            <i class="mdi mdi-trash-can font-size-16 align-middle"></i>
+                                                        <input type="hidden" name="jabatan" value="{{ $sortJabatan }}">
+                                                        <input type="hidden" name="bulan" value="{{ $sortBulan }}">
+                                                        <button type="submit" class="btn btn-soft-danger btn-sm" 
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')" title="Hapus">
+                                                            <i class="mdi mdi-delete"></i>
                                                         </button>
                                                     </form>
-
-                                                    <!-- Modal Konfirmasi Hapus -->
-                                                    <div class="modal fade" id="deleteModal{{ $lembur->id }}"
-                                                        tabindex="-1" aria-labelledby="deleteModalLabel"
-                                                        aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="deleteModalLabel">
-                                                                        Konfirmasi Penghapusan
-                                                                    </h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    Apakah Anda yakin ingin menghapus data lembur
-                                                                    <strong>{{ $lembur->karyawan->nama_karyawan ?? 'Karyawan' }}</strong>
-                                                                    pada tanggal
-                                                                    <strong>{{ \Carbon\Carbon::parse($lembur->tanggal)->format('d-m-Y') }}</strong>?
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Batal</button>
-                                                                    <button type="button" class="btn btn-danger"
-                                                                        onclick="document.getElementById('deleteForm{{ $lembur->id }}').submit();">Hapus</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Edit Modal -->
-                                    <div id="editModal{{ $lembur->id }}" class="modal fade" tabindex="-1"
-                                        aria-labelledby="editModalLabel" aria-hidden="true" data-bs-scroll="true"
-                                        data-bs-backdrop="static">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Data Lembur</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <form class="needs-validation"
-                                                    action="{{ route('lembur.update', $lembur->id) }}" method="POST"
-                                                    novalidate>
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="modal-body">
-                                                        <!-- Tambahkan dropdown Jabatan -->
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="edit_jabatan_id{{ $lembur->id }}">Jabatan</label>
-                                                            <select class="form-control edit-jabatan-dropdown"
-                                                                id="edit_jabatan_id{{ $lembur->id }}"
-                                                                name="jabatan_id" required
-                                                                data-lembur-id="{{ $lembur->id }}">
-                                                                <option value="">Pilih Jabatan</option>
-                                                                @foreach ($jabatan as $j)
-                                                                    <option value="{{ $j->id }}"
-                                                                        {{ $lembur->karyawan->id_jabatan == $j->id ? 'selected' : '' }}>
-                                                                        {{ $j->nama_jabatan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div class="invalid-feedback">
-                                                                Jabatan harus dipilih
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Modifikasi dropdown Karyawan -->
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="edit_karyawan_id{{ $lembur->id }}">Karyawan</label>
-                                                            <select class="form-control edit-karyawan-dropdown"
-                                                                id="edit_karyawan_id{{ $lembur->id }}"
-                                                                name="karyawan_id" required>
-                                                                <option value="">Pilih Karyawan</option>
-                                                                <!-- Karyawan sesuai jabatan akan diisi via JavaScript -->
-                                                                <!-- Tapi kita tetap perlu menampilkan karyawan yang sudah dipilih -->
-                                                                <option value="{{ $lembur->karyawan->id }}" selected>
-                                                                    {{ $lembur->karyawan->user->karyawan }}
-                                                                </option>
-                                                            </select>
-                                                            <div class="invalid-feedback">
-                                                                Karyawan harus dipilih
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="edit_tanggal{{ $lembur->id }}">Tanggal
-                                                                Lembur</label>
-                                                            <input type="date" class="form-control"
-                                                                id="edit_tanggal{{ $lembur->id }}" name="tanggal"
-                                                                required value="{{ $lembur->tanggal }}">
-                                                            <div class="invalid-feedback">
-                                                                Tanggal lembur harus diisi
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="mb-3">
-                                                                    <label class="form-label"
-                                                                        for="edit_jam_mulai{{ $lembur->id }}">Jam
-                                                                        Mulai</label>
-                                                                    <input type="time" class="form-control"
-                                                                        id="edit_jam_mulai{{ $lembur->id }}"
-                                                                        name="jam_mulai" required
-                                                                        value="{{ $lembur->jam_mulai }}">
-                                                                    <div class="invalid-feedback">
-                                                                        Jam mulai harus diisi
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="mb-3">
-                                                                    <label class="form-label"
-                                                                        for="edit_jam_selesai{{ $lembur->id }}">Jam
-                                                                        Selesai</label>
-                                                                    <input type="time" class="form-control"
-                                                                        id="edit_jam_selesai{{ $lembur->id }}"
-                                                                        name="jam_selesai" required
-                                                                        value="{{ $lembur->jam_selesai }}">
-                                                                    <div class="invalid-feedback">
-                                                                        Jam selesai harus diisi
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary waves-effect"
-                                                            data-bs-dismiss="modal">Tutup</button>
-                                                        <button type="submit"
-                                                            class="btn btn-primary waves-effect waves-light">Simpan
-                                                            Perubahan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        
-                        @if(count($lemburs) == 0)
-                            <div class="text-center p-4">
-                                <div class="alert alert-info" role="alert">
-                                    Tidak ada data lembur untuk filter yang dipilih.
-                                </div>
-                            </div>
-                        @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8" class="text-center">Tidak ada data lembur</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <!-- end cardaa -->
-            </div> <!-- end col -->
+            </div>
         </div>
     </div>
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        data-bs-scroll="true" data-bs-backdrop="static">
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('lembur.store') }}" method="POST" class="needs-validation" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Tambah Data Lembur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('lembur.store') }}" method="POST">
                     @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLemburLabel">Tambah Data Lembur</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Tutup"></button>
-                    </div>
-                    <!-- Dalam modal form tambah lembur -->
+                    <input type="hidden" name="jabatan" value="{{ $sortJabatan }}">
+                    <input type="hidden" name="bulan" value="{{ $sortBulan }}">
                     <div class="modal-body">
-                        <!-- Jabatan (Ditambahkan) -->
                         <div class="mb-3">
-                            <label for="jabatan_id" class="form-label">Jabatan</label>
-                            <select name="jabatan_id" id="jabatan_id" class="form-control" required>
-                                <option value="">Pilih Jabatan</option>
-                                @foreach ($jabatan as $j)
-                                    <option value="{{ $j->id }}">{{ $j->nama_jabatan }}</option>
+                            <label for="karyawan_id" class="form-label">Karyawan <span class="text-danger">*</span></label>
+                            <select name="karyawan_id" id="karyawan_id" class="form-select" required>
+                                <option value="">Pilih Karyawan</option>
+                                @foreach($karyawans as $karyawan)
+                                    <option value="{{ $karyawan->id }}">
+                                        {{ $karyawan->user->name }} - {{ $karyawan->jabatan->nama_jabatan }}
+                                    </option>
                                 @endforeach
                             </select>
-                            <div class="invalid-feedback">Jabatan wajib dipilih.</div>
                         </div>
-
-                        <!-- Karyawan (Dimodifikasi) -->
                         <div class="mb-3">
-                            <label for="karyawan_id" class="form-label">Karyawan</label>
-                            <select name="karyawan_id" id="karyawan_id" class="form-control" required disabled>
-                                <option value="">Pilih Karyawan</option>
-                                <!-- Karyawan akan diisi melalui AJAX -->
-                            </select>
-                            <div class="invalid-feedback">Karyawan wajib dipilih.</div>
-                        </div>
-
-                        <!-- Tanggal -->
-                        <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal Lembur</label>
+                            <label for="tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
                             <input type="date" name="tanggal" id="tanggal" class="form-control" required>
-                            <div class="invalid-feedback">Tanggal wajib diisi.</div>
                         </div>
-
-                        <!-- Jam Mulai & Selesai -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                                    <input type="time" name="jam_mulai" id="jam_mulai" class="form-control"
-                                        required>
-                                    <div class="invalid-feedback">Jam mulai wajib diisi.</div>
+                                    <label for="jam_mulai" class="form-label">Jam Mulai <span class="text-danger">*</span></label>
+                                    <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" required autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                                    <input type="time" name="jam_selesai" id="jam_selesai" class="form-control"
-                                        required>
-                                    <div class="invalid-feedback">Jam selesai wajib diisi.</div>
+                                    <label for="jam_selesai" class="form-label">Jam Selesai <span class="text-danger">*</span></label>
+                                    <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" required autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -351,82 +211,146 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Data Lembur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="jabatan" value="{{ $sortJabatan }}">
+                    <input type="hidden" name="bulan" value="{{ $sortBulan }}">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_karyawan_id" class="form-label">Karyawan <span class="text-danger">*</span></label>
+                            <select name="karyawan_id" id="edit_karyawan_id" class="form-select" required>
+                                <option value="">Pilih Karyawan</option>
+                                @foreach($karyawans as $karyawan)
+                                    <option value="{{ $karyawan->id }}">
+                                        {{ $karyawan->user->name }} - {{ $karyawan->jabatan->nama_jabatan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal" id="edit_tanggal" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="edit_jam_mulai" class="form-label">Jam Mulai <span class="text-danger">*</span></label>
+                                    <input type="time" name="jam_mulai" id="edit_jam_mulai" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="edit_jam_selesai" class="form-label">Jam Selesai <span class="text-danger">*</span></label>
+                                    <input type="time" name="jam_selesai" id="edit_jam_selesai" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- Tambahkan script ini di bagian bawah halaman atau di bagian scripts -->
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Detail Lembur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4"><strong>Karyawan:</strong></div>
+                        <div class="col-md-8" id="detail_karyawan"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4"><strong>Jabatan:</strong></div>
+                        <div class="col-md-8" id="detail_jabatan"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4"><strong>Tanggal:</strong></div>
+                        <div class="col-md-8" id="detail_tanggal"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4"><strong>Jam Mulai:</strong></div>
+                        <div class="col-md-8" id="detail_jam_mulai"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4"><strong>Jam Selesai:</strong></div>
+                        <div class="col-md-8" id="detail_jam_selesai"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4"><strong>Total Jam:</strong></div>
+                        <div class="col-md-8" id="detail_total_jam"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mendapatkan elemen dropdown
-            const jabatanDropdown = document.getElementById('jabatan_id');
-            const karyawanDropdown = document.getElementById('karyawan_id');
-
-            // Menambahkan event listener untuk perubahan pada dropdown jabatan
-            jabatanDropdown.addEventListener('change', function() {
-                const selectedJabatanId = this.value;
-
-                // Reset dropdown karyawan
-                karyawanDropdown.innerHTML = '<option value="">Pilih Karyawan</option>';
-
-                // Jika tidak ada jabatan yang dipilih, disable dropdown karyawan
-                if (!selectedJabatanId) {
-                    karyawanDropdown.disabled = true;
-                    return;
-                }
-
-                // Fetch karyawan berdasarkan jabatan yang dipilih
-                fetch(`/get-karyawan-by-jabatan/${selectedJabatanId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Enable dropdown karyawan
-                        karyawanDropdown.disabled = false;
-
-                        // Mengisi dropdown karyawan dengan data yang diterima
-                        // Menggunakan nama_karyawan sesuai dengan model Anda
-                        data.forEach(karyawan => {
-                            const option = document.createElement('option');
-                            option.value = karyawan.id;
-                            option.textContent = karyawan.nama_karyawan;
-                            karyawanDropdown.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat memuat data karyawan.');
-                    });
-            });
-            
-            // Menambahkan event listener untuk semua dropdown edit-jabatan-dropdown
-            document.querySelectorAll('.edit-jabatan-dropdown').forEach(function(dropdown) {
-                dropdown.addEventListener('change', function() {
-                    const selectedJabatanId = this.value;
-                    const lemburId = this.dataset.lemburId;
-                    const karyawanDropdown = document.getElementById(`edit_karyawan_id${lemburId}`);
+        // Function untuk edit lembur
+        function editLembur(id) {
+            fetch(`/lembur/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editForm').action = `/lembur/${id}`;
+                    document.getElementById('edit_karyawan_id').value = data.karyawan_id;
+                    document.getElementById('edit_tanggal').value = data.tanggal;
+                    document.getElementById('edit_jam_mulai').value = data.jam_mulai;
+                    document.getElementById('edit_jam_selesai').value = data.jam_selesai;
                     
-                    // Reset dropdown karyawan
-                    karyawanDropdown.innerHTML = '<option value="">Pilih Karyawan</option>';
-                    
-                    // Jika tidak ada jabatan yang dipilih, disable dropdown karyawan
-                    if (!selectedJabatanId) {
-                        return;
-                    }
-                    
-                    // Fetch karyawan berdasarkan jabatan yang dipilih
-                    fetch(`/get-karyawan-by-jabatan/${selectedJabatanId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Mengisi dropdown karyawan dengan data yang diterima
-                            data.forEach(karyawan => {
-                                const option = document.createElement('option');
-                                option.value = karyawan.id;
-                                option.textContent = karyawan.nama_karyawan;
-                                karyawanDropdown.appendChild(option);
-                            });
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Terjadi kesalahan saat memuat data karyawan.');
-                        });
+                    // Show modal
+                    var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                    editModal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengambil data');
                 });
-            });
-        });
+        }
+
+        // Function untuk show detail
+        function showDetail(id) {
+            fetch(`/lembur/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('detail_karyawan').textContent = data.karyawan.user.name;
+                    document.getElementById('detail_jabatan').textContent = data.karyawan.jabatan.nama_jabatan;
+                    document.getElementById('detail_tanggal').textContent = new Date(data.tanggal).toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    document.getElementById('detail_jam_mulai').textContent = data.jam_mulai;
+                    document.getElementById('detail_jam_selesai').textContent = data.jam_selesai;
+                    document.getElementById('detail_total_jam').textContent = data.total_jam + ' jam';
+                    
+                    // Show modal
+                    var detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+                    detailModal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengambil data');
+                });
+        }
     </script>
 </x-app>

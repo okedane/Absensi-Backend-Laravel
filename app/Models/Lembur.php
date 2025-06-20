@@ -9,8 +9,6 @@ class Lembur extends Model
 {
     use HasFactory;
 
-     protected $table = 'lemburs';
-
     protected $fillable = [
         'karyawan_id',
         'tanggal',
@@ -19,11 +17,14 @@ class Lembur extends Model
         'total_jam'
     ];
 
+    protected $casts = [
+        'tanggal' => 'date',
+        'jam_mulai' => 'datetime:H:i',
+        'jam_selesai' => 'datetime:H:i'
+    ];
+
     public function karyawan()
     {
         return $this->belongsTo(Karyawan::class);
     }
-    
-
-    
 }

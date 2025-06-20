@@ -67,10 +67,12 @@ Route::get('izin', [IzinController::class, 'index'])->name('izin.index');
 Route::patch('/izin/{id}/status', [IzinController::class, 'updateStatus'])->name('izin.updateStatus');
 
 Route::get('absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+ Route::get('absensi-show-{karyawanId}', [AbsensiController::class, 'show'])->name('absensi.show');
 
-
-Route::get('lembur', [LemburController::class, 'index'])->name('lembur.index');
-Route::get('/get-karyawan-by-jabatan/{jabatan_id}', [LemburController::class, 'getKaryawanByJabatan'])->name('karyawan.by.jabatan');
-Route::post('lemburStore', [LemburController::class, 'store'])->name('lembur.store');
-Route::put('lemburPut/{id}', [LemburController::class, 'update'])->name('lembur.update');
-Route::delete('lemburDelete/{id}', [LemburController::class, 'delete'])->name('lembur.delete');
+Route::prefix('lembur')->name('lembur.')->group(function () {
+    Route::get('/', [LemburController::class, 'index'])->name('index');
+    Route::post('/', [LemburController::class, 'store'])->name('store');
+    Route::get('/{id}', [LemburController::class, 'show'])->name('show');
+    Route::put('/{id}', [LemburController::class, 'update'])->name('update');
+    Route::delete('/{id}', [LemburController::class, 'destroy'])->name('destroy');
+});

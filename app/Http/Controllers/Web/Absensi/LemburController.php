@@ -9,101 +9,156 @@ use App\Models\Lembur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-
 class LemburController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil parameter filter dari request
-        $jabatanId = $request->get('jabatan_id');
-        $monthInput = $request->get('bulan', date('Y-m'));
+        // Ambil parameter sorting
+        $sortJabatan = $request->get('jabatan');
+        $sortBulan = $request->get('bulan');
 
-        // Parse bulan dan tahun dari input
-        $bulan = Carbon::parse($monthInput)->format('m');
-        $tahun = Carbon::parse($monthInput)->format('Y');
+        // Query dasar
+        $query = Lembur::with(['karyawan.user', 'karyawan.jabatan']);
 
-        // Query untuk lembur dengan filter
-        $lemburs = Lembur::with('karyawan.jabatan')
-            ->when($jabatanId, function ($query) use ($jabatanId) {
-                return $query->whereHas('karyawan', function ($q) use ($jabatanId) {
-                    $q->where('jabatan_id', $jabatanId);
-                });
-            })
-            ->when($monthInput, function ($query) use ($bulan, $tahun) {
-                return $query->whereMonth('tanggal', $bulan)
-                    ->whereYear('tanggal', $tahun);
-            })
-            ->get();
+        // Filter berdasarkan jabatan jika dipilih
+        if ($sortJabatan) {
+            $query->whereHas('karyawan.jabatan', function ($q) use ($sortJabatan) {
+                $q->where('id', $sortJabatan);
+            });
+        }
 
-        $jabatan = Jabatan::all();
-        $karyawan = Karyawan::all();
+        // Filter berdasarkan bulan jika dipilih
+        if ($sortBulan) {
+            $query->whereMonth('tanggal', $sortBulan);
+        }
 
-        return view('absensi.lembur.index', compact(
-            'lemburs',
-            'jabatan',
-            'karyawan',
-            'jabatanId',
-            'monthInput'
-        ));
+        // Urutkan berdasarkan tanggal terbaru
+        $lemburs = $query->orderBy('tanggal', 'desc')->get();
+
+        // Ambil data untuk dropdown
+        $jabatans = Jabatan::all();
+        $karyawans = Karyawan::with(['user', 'jabatan'])->get();
+        $bulans = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+
+        return view('absensi.lembur.index', compact('lemburs', 'jabatans', 'karyawans', 'bulans', 'sortJabatan', 'sortBulan'));
     }
-
-    public function getKaryawanByJabatan($jabatan_id)
-    {
-
-        $karyawan = Karyawan::where('jabatan_id', $jabatan_id)->get();
-        return response()->json($karyawan);
-    }
-
 
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'karyawan_id'    => 'required|exists:karyawans,id',
-
-                'tanggal'        => 'required|date',
-                'jam_mulai'      => 'required|date_format:H:i',
-                'jam_selesai'    => 'required|date_format:H:i|after:jam_mulai',
+            $request->validate([
+                'karyawan_id' => 'required|exists:karyawans,id',
+                'tanggal' => 'required|date',
+                'jam_mulai' => 'required|date_format:H:i',
+                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            ], [
+                'karyawan_id.required' => 'Karyawan harus dipilih',
+                'karyawan_id.exists' => 'Karyawan tidak valid',
+                'tanggal.required' => 'Tanggal harus diisi',
+                'tanggal.date' => 'Format tanggal tidak valid',
+                'jam_mulai.required' => 'Jam mulai harus diisi',
+                'jam_mulai.date_format' => 'Format jam mulai tidak valid',
+                'jam_selesai.required' => 'Jam selesai harus diisi',
+                'jam_selesai.date_format' => 'Format jam selesai tidak valid',
+                'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai',
             ]);
 
+            // Hitung total jam
+            $jamMulai = Carbon::createFromFormat('H:i', $request->jam_mulai);
+            $jamSelesai = Carbon::createFromFormat('H:i', $request->jam_selesai);
+            $totalJam = $jamSelesai->diffInHours($jamMulai);
 
-            $start = strtotime($request->jam_mulai);
-            $end = strtotime($request->jam_selesai);
-            $totalJam = round(($end - $start) / 3600);
+            Lembur::create([
+                'karyawan_id' => $request->karyawan_id,
+                'tanggal' => $request->tanggal,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'total_jam' => $totalJam,
+            ]);
 
-            $validated['total_jam'] = $totalJam;
-
-            Lembur::create($validated);
-
-            return redirect()->back()->with('success', 'Data lembur berhasil ditambahkan');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan lembur');
+            return redirect()->route('lembur.index', $request->only(['jabatan', 'bulan']))
+                ->with('success', 'Data lembur berhasil ditambahkan');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function show($id)
+    {
+        $lembur = Lembur::with(['karyawan.user', 'karyawan.jabatan'])->findOrFail($id);
+        return response()->json($lembur);
     }
 
     public function update(Request $request, $id)
     {
         try {
-            $validated = $request->validate([
-                'karyawan_id'    => 'required|exists:karyawans,id',
-
-                'tanggal'        => 'required|date',
-                'jam_mulai'      => 'required|date_format:H:i',
-                'jam_selesai'    => 'required|date_format:H:i|after:jam_mulai',
+            $request->validate([
+                'karyawan_id' => 'required|exists:karyawans,id',
+                'tanggal' => 'required|date',
+                'jam_mulai' => 'required|date_format:H:i',
+                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            ], [
+                'karyawan_id.required' => 'Karyawan harus dipilih',
+                'karyawan_id.exists' => 'Karyawan tidak valid',
+                'tanggal.required' => 'Tanggal harus diisi',
+                'tanggal.date' => 'Format tanggal tidak valid',
+                'jam_mulai.required' => 'Jam mulai harus diisi',
+                'jam_mulai.date_format' => 'Format jam mulai tidak valid',
+                'jam_selesai.required' => 'Jam selesai harus diisi',
+                'jam_selesai.date_format' => 'Format jam selesai tidak valid',
+                'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai',
             ]);
 
-            $start = strtotime($request->jam_mulai);
-            $end = strtotime($request->jam_selesai);
-            $totalJam = round(($end - $start) / 3600);
-
-            $validated['total_jam'] = $totalJam;
-
             $lembur = Lembur::findOrFail($id);
-            $lembur->update($validated);
 
-            return redirect()->back()->with('success', 'Data lembur berhasil diperbarui');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui lembur');
+            // Hitung total jam
+            $jamMulai = Carbon::createFromFormat('H:i', $request->jam_mulai);
+            $jamSelesai = Carbon::createFromFormat('H:i', $request->jam_selesai);
+            $totalJam = $jamSelesai->diffInHours($jamMulai);
+
+            $lembur->update([
+                'karyawan_id' => $request->karyawan_id,
+                'tanggal' => $request->tanggal,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'total_jam' => $totalJam,
+            ]);
+
+            return redirect()->route('lembur.index', $request->only(['jabatan', 'bulan']))
+                ->with('success', 'Data lembur berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $lembur = Lembur::findOrFail($id);
+            $lembur->delete();
+
+            return redirect()->route('lembur.index', $request->only(['jabatan', 'bulan']))
+                ->with('success', 'Data lembur berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

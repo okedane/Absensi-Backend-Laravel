@@ -128,4 +128,39 @@ class AbsensiController extends Controller
 
         return $earthRadius * $c; // hasil meter
     }
+
+
+    //  /api/absensi/history?bulan=6&tahun=2025
+    
+
+    public function history(Request $request)
+    {
+        $user = $request->user();
+        $karyawan = $user->karyawan;
+
+        if (!$karyawan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Karyawan tidak ditemukan.'
+            ], 404);
+        }
+
+        // Opsional: filter bulan & tahun
+        $query = $karyawan->absensis()->with(['jadwalKerja', 'izin'])->orderBy('tanggal', 'desc');
+
+        if ($request->has('bulan')) {
+            $query->whereMonth('tanggal', $request->bulan);
+        }
+
+        if ($request->has('tahun')) {
+            $query->whereYear('tanggal', $request->tahun);
+        }
+
+        $absensi = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $absensi
+        ]);
+    }
 }
