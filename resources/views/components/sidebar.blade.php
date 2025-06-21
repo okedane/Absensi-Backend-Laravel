@@ -65,6 +65,38 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="cpu"></i>
+                        <span data-key="t-icons">Moora</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <a href="{{ route('kriteria.index') }}">
+                                <i data-feather="sliders"></i>
+                                Kriteria
+                            </a>
+                        </li>
+                        {{-- <li>
+                            <a href="{{ route('subKriteria.index') }}">
+                                <i data-feather="list"></i>
+                                Sub Kriteria
+                            </a>
+                        </li> --}}
+                        <li>
+                            <a href="">
+                                <i data-feather="edit"></i>
+                                Penilaian
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <i data-feather="bar-chart-2"></i>
+                                Hasil
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="cpu"></i>

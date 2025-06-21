@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Kriteria;
+use App\Models\SubKriteria;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,7 +22,9 @@ class DatabaseSeeder extends Seeder
             LokasiSeeder::class,
             IzinSeeder::class,
             JadwalKerjaSeeder::class,
-            // AbsensiSeeder::class,
+            KriteriaSeeder::class,
+            SubKriteriaSeeder::class,
+            AbsensiSeeder::class,
         ]);
     }
 }

@@ -13,7 +13,7 @@ class JabatanSeeder extends Seeder
     public function run(): void
     {
         \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Manager',
+            'nama_jabatan' => 'Test',
         ]);
         \App\Models\Jabatan::create([
             'nama_jabatan' => 'Kasir',
