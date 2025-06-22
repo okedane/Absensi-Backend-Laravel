@@ -47,8 +47,8 @@ class AbsensiSeeder extends Seeder
                         $jamAbsen->addMinutes(5);
                         $keterlambatan = 5;
                     } elseif ($karyawanId == 2) {
-                        $jamAbsen->addMinutes(10);
-                        $keterlambatan = 10;
+                        $jamAbsen->addMinutes(120);
+                        $keterlambatan = 120; // 2 jam
                     } elseif ($karyawanId == 3) {
                         $jamAbsen->addMinutes(2);
                         $keterlambatan = 2;

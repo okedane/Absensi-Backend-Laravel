@@ -33,9 +33,10 @@
                     <thead>
                         <tr>
                             <th style="width:20px">No</th>
+                            <th>Nama</th>
                             <th>Bobot</th>
-                            <th>Min value</th>
-                            <th>Max value</th>
+                            {{-- <th>Min value</th>
+                            <th>Max value</th> --}}
                             <th style="text-align: center; width: 100px;" class="no-export">Action</th>
                         </tr>
                     </thead>
@@ -45,8 +46,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->bobot }}</td>
-                                <td>{{ $item->min_value }}</td>
-                                <td>{{ $item->max_value }}</td>
+                                {{-- <td>{{ $item->min_value }}</td>
+                                <td>{{ $item->max_value }}</td> --}}
                                 <td style="text-align: center; width: 100px;">
                                     <div class="d-flex justify-content-center gap-2">
 

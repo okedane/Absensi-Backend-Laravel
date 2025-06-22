@@ -18,9 +18,34 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Daftar Penilaian</h4>
-                            <button type="button" class="btn btn-primary waves-effect waves-light"
+                        <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+                            <form method="GET" action="{{ route('penilaianKaryawan.filter', $jabatan->id) }}"
+                                class="row g-2 align-items-center mb-0">
+                                <div class="col-auto">
+                                    <select name="bulan" class="form-control" required>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ request('bulan', now()->month) == $i ? 'selected' : '' }}>
+                                                {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select name="tahun" class="form-control" required>
+                                        @for ($y = now()->year; $y >= 2020; $y--)
+                                            <option value="{{ $y }}"
+                                                {{ request('tahun', now()->year) == $y ? 'selected' : '' }}>
+                                                {{ $y }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </form>
+                            <button type="button" class="btn btn-primary waves-effect waves-light mt-2 mt-md-0"
                                 data-bs-toggle="modal" data-bs-target="#myModal">Tambah Penilaian</button>
                         </div>
 
@@ -76,8 +101,9 @@
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-soft-danger waves-effect waves-light">
-                                                         <i class="mdi mdi-trash-can font-size-16 align-middle"></i>
+                                                    <button type="submit"
+                                                        class="btn btn-soft-danger waves-effect waves-light">
+                                                        <i class="mdi mdi-trash-can font-size-16 align-middle"></i>
                                                     </button>
                                                 </form>
                                             </td>
@@ -100,6 +126,32 @@
                                 <form action="{{ route('penilaianKaryawan.post') }}" method="POST">
                                     @csrf
                                     <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Bulan</label>
+                                                <select name="bulan" class="form-control" required>
+                                                    @for ($i = 1; $i <= 12; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ now()->month == $i ? 'selected' : '' }}>
+                                                            {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label>Tahun</label>
+                                                <select name="tahun" class="form-control" required>
+                                                    @for ($year = now()->year; $year >= 2020; $year--)
+                                                        <option value="{{ $year }}"
+                                                            {{ now()->year == $year ? 'selected' : '' }}>
+                                                            {{ $year }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="mb-3">
                                             <label>Pilih Karyawan</label>
                                             <select name="karyawan_id" class="form-control" required>
@@ -114,29 +166,25 @@
                                         @foreach ($kriterias as $kriteria)
                                             <div class="mb-3">
                                                 <label>{{ $kriteria->nama }}</label>
-                                                <select name="penilaian[{{ $kriteria->id }}]" class="form-control"
-                                                    required>
-                                                    <option disabled selected>Pilih Sub Kriteria</option>
-                                                    @foreach ($kriteria->subKriterias as $sub)
-                                                        <option value="{{ $sub->bobot }}">{{ $sub->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                @if (strtolower($kriteria->nama) === 'keterlambatan')
+                                                    <input type="text" class="form-control bg-light"
+                                                        value="Nilai otomatis dari absensi" disabled>
+                                                @elseif (strtolower($kriteria->nama) === 'lembur')
+                                                    <input type="text" class="form-control bg-light"
+                                                        value="Nilai otomatis dari lembur" disabled>
+                                                @else
+                                                    <select name="penilaian[{{ $kriteria->id }}]" class="form-control"
+                                                        required>
+                                                        <option disabled selected>Pilih Sub Kriteria</option>
+                                                        @foreach ($kriteria->subKriterias as $sub)
+                                                            <option value="{{ $sub->bobot }}">{{ $sub->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @endif
                                             </div>
                                         @endforeach
 
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Bulan</label>
-                                                <input type="number" name="bulan" min="1" max="12"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Tahun</label>
-                                                <input type="number" name="tahun" min="2000" max="2100"
-                                                    class="form-control" required>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="modal-footer">
@@ -148,95 +196,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Modal Edit -->
-                    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit Penilaian Karyawan</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <form action="{{ route('penilaianKaryawan.update', ':id') }}" method="POST"
-                                    id="editForm">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label>Nama Karyawan</label>
-                                            <input type="text" class="form-control" id="editNamaKaryawan" readonly>
-                                        </div>
-
-                                        <!-- Input Nilai untuk Tiap Kriteria -->
-                                        @foreach ($kriterias as $kriteria)
-                                            <div class="mb-3">
-                                                <label>{{ $kriteria->nama }}</label>
-                                                <select name="penilaian[{{ $kriteria->id }}]" class="form-control"
-                                                    required>
-                                                    <option disabled selected>Pilih Sub Kriteria</option>
-                                                    @foreach ($kriteria->subKriterias as $sub)
-                                                        <option value="{{ $sub->bobot }}">{{ $sub->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        @endforeach
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Bulan</label>
-                                                <input type="number" name="bulan" min="1" max="12"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Tahun</label>
-                                                <input type="number" name="tahun" min="2000" max="2100"
-                                                    class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Tutup</button>
-                                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.btn-edit').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    // Set form action
-                    const karyawanId = this.getAttribute('data-karyawan');
-                    document.getElementById('formEditPenilaian').action = '/penilaian-karyawan/' +
-                        karyawanId;
-
-                    // Set nama karyawan
-                    document.getElementById('editKaryawanId').value = karyawanId;
-                    document.getElementById('editNamaKaryawan').value = this.getAttribute(
-                        'data-nama');
-
-                    // Set nilai tiap kriteria
-                    @foreach ($kriterias as $kriteria)
-                        let nilai = this.getAttribute('data-kriteria-{{ $kriteria->id }}');
-                        document.getElementById('editKriteria{{ $kriteria->id }}').value = nilai;
-                    @endforeach
-
-                    // Set bulan dan tahun
-                    document.getElementById('editBulan').value = this.getAttribute('data-bulan');
-                    document.getElementById('editTahun').value = this.getAttribute('data-tahun');
-                });
-            });
-        });
-    </script>
 </x-app>
