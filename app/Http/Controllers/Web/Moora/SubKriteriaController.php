@@ -21,6 +21,7 @@ class SubKriteriaController extends Controller
         try {
             $validated = $request->validate([
                 'kriteria_id'        => 'required',
+                'nama'              => 'required',
                 'min_value'          => 'required',
                 'max_value'          => 'required',
                 'bobot'              => 'required'
@@ -37,6 +38,7 @@ class SubKriteriaController extends Controller
     {
         try {
             $validated = $request->validate([
+                'nama'                => 'required',
                 'min_value'           => 'required',
                 'max_value'           => 'required',
                 'bobot'               => 'required'

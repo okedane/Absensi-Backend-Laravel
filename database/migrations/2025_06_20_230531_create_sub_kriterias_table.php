@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('sub_kriterias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kriteria_id')->constrained()->onDelete('cascade');
-            // $table->string('nama');
+            $table->string('nama');
             $table->integer('min_value')->nullable(); // misal: 0
             $table->integer('max_value')->nullable(); // misal: 15
-            $table->decimal('bobot', 5, 2); // misal: 1.0
+            $table->integer('bobot'); // misal: 1.0
             $table->timestamps();
         });
     }

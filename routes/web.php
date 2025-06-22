@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Moora\PenilaianKaryawanController;
 use App\Http\Controllers\Web\Absensi\AbsensiController;
 use App\Http\Controllers\Web\Absensi\IzinController;
 use App\Http\Controllers\Web\Absensi\JadwalKerjaController;
@@ -90,3 +91,10 @@ Route::get('subKriteria/{id}', [SubKriteriaController::class, 'index'])->name('s
 Route::post('subKriteriaStore', [SubKriteriaController::class, 'post'])->name('subKriteria.post');
 Route::put('subKriteriaPut/{id}', [SubKriteriaController::class, 'put'])->name('subKriteria.put');
 Route::delete('subKriteriaDelete/{id}', [SubKriteriaController::class, 'delete'])->name('subKriteria.delete');
+
+
+Route::get('penilaian', [PenilaianKaryawanController::class, 'index'])->name('penilaian.index');
+Route::get('/penilaian/jabatan/{id_jabatan}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaian.byJabatan');
+Route::post('penilaianKaryawanStore', [PenilaianKaryawanController::class, 'store'])->name('penilaianKaryawan.post');
+Route::put('penilaianKaryawanPut/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaianKaryawan.update');
+Route::delete('penilaianKaryawanDelete/{id}', [PenilaianKaryawanController::class, 'destroy'])->name('penilaianKaryawan.delete');

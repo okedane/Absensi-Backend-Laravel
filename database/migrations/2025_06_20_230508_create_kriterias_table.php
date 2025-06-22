@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('absensi_id')->nullable()->constrained()->onDelete('set null');
             $table->string('kode')->unique(); // C1, C2, dst
             $table->string('nama'); // Keterlambatan, Skill, dst
             $table->enum('sifat', ['benefit', 'cost']);

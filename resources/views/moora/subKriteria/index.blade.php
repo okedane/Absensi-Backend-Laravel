@@ -43,7 +43,7 @@
                         @foreach ($subKriteria as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-
+                                <td>{{ $item->nama }}</td>
                                 <td>{{ $item->bobot }}</td>
                                 <td>{{ $item->min_value }}</td>
                                 <td>{{ $item->max_value }}</td>
@@ -128,6 +128,15 @@
                                                             @method('PUT')
                                                             <div class="modal-body">
 
+                                                                <div>
+                                                                    <label class="form-label"
+                                                                        for="nama">Nama</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="bobot" name="nama"
+                                                                        value="{{ $item->nama }}" required>
+                                                                    <div class="invalid-feedback">Nama harus
+                                                                        diisi.</div>
+                                                                </div>
 
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
@@ -135,7 +144,7 @@
                                                                     <input type="text" class="form-control"
                                                                         id="bobot" name="bobot"
                                                                         value="{{ $item->bobot }}" required>
-                                                                    <div class="invalid-feedback">Sub Kriteria harus
+                                                                    <div class="invalid-feedback">Bobot harus
                                                                         diisi.</div>
                                                                 </div>
 
@@ -205,12 +214,18 @@
                                     <form class="needs-validation" action="{{ route('subKriteria.post') }}"
                                         method="POST" novalidate>
                                         @csrf
-
-
+                                        <div class="mb-3">
+                                            <label class="form-label" for="validationCustom01">Nama</label>
+                                            <input type="text" class="form-control" id="validationCustom01"
+                                                placeholder="Masukan Nama" name="nama" required>
+                                            <div class="invalid-feedback">
+                                                Bobot harus diisi
+                                            </div>
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">Bobot</label>
                                             <input type="text" class="form-control" id="validationCustom01"
-                                                placeholder="Masukan Nama" name="bobot" required>
+                                                placeholder="Masukan Bobot" name="bobot" required>
                                             <div class="invalid-feedback">
                                                 Bobot harus diisi
                                             </div>
@@ -228,7 +243,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">max_value</label>
                                             <input type="text" class="form-control" id="validationCustom01"
-                                                placeholder="Masukan max" name="max_value" required>
+                                                placeholder="Masukan max" name="max_value">
                                             <div class="invalid-feedback">
                                                 max harus diisi
                                             </div>

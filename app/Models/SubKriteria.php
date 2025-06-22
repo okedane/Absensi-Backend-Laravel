@@ -9,7 +9,7 @@ class SubKriteria extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kriteria_id', 'min_value', 'max_value', 'bobot'];
+    protected $fillable = ['kriteria_id', 'nama', 'min_value', 'max_value', 'bobot'];
 
     public function kriteria()
     {
