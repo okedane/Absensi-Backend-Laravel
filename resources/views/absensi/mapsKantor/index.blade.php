@@ -7,7 +7,7 @@
                         <h4 class="mb-sm-0 font-size-18">Lokasi Restoran</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
                                 <li class="breadcrumb-item active">Lokasi Restoran</li>
                             </ol>
                         </div>
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                                 <tr>
                                     <th style="width:20px">No</th>

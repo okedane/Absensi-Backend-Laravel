@@ -65,32 +65,43 @@
                     </ul>
                 </li>
 
-                {{-- <li>
+                <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="cpu"></i>
-                        <span data-key="t-icons">MOORA</span>
+                        <span data-key="t-icons">Moora</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('kriteria.index') }}">Kriteria</a></li>
-                        <li><a href="{{ route('penilaian.index') }}" data-key="t-material-design">Penilaian</a></li>
-                        <li><a href="{{ route('rekap.index') }}" data-key="t-dripicons">Rekap</a></li>
-                        <li><a href="{{ route('absensi.index') }}" data-key="t-dripicons">Hasil Moora</a></li>
+                        <li>
+                            <a href="{{ route('kriteria.index') }}">
+                                <i data-feather="sliders"></i>
+                                Kriteria
+                            </a>
+                        </li>
+                       
+                        <li>
+                            <a href="{{ route('penilaian.index') }}">
+                                <i data-feather="edit"></i>
+                                Penilaian
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <i data-feather="bar-chart-2"></i>
+                                Hasil
+                            </a>
+                        </li>
                     </ul>
-                </li> --}}
+                </li>
 
-
+                <li>
+                    <a href="">
+                        <i data-feather="users"></i>
+                        <span data-key="t-dashboard">Management Akun</span>
+                    </a>
+                </li>
             </ul>
 
-            {{-- <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
-                <div class="card-body">
-                    <img src="assets/images/giftbox.png" alt="">
-                    <div class="mt-4">
-                        <h5 class="alertcard-title font-size-16">Unlimited Access</h5>
-                        <p class="font-size-13">Upgrade your plan from a Free trial, to select ‘Business Plan’.</p>
-                        <a href="#!" class="btn btn-primary mt-2">Upgrade Now</a>
-                    </div>
-                </div>
-            </div> --}}
+
         </div>
         <!-- Sidebar -->
     </div>

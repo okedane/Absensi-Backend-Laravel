@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Moora\PenilaianKaryawanController;
 use App\Http\Controllers\Web\Absensi\AbsensiController;
 use App\Http\Controllers\Web\Absensi\IzinController;
 use App\Http\Controllers\Web\Absensi\JadwalKerjaController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Web\Absensi\LokasiAbsensiController;
 use App\Http\Controllers\Web\Data\JabatanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Data\KaryawanController;
+use App\Http\Controllers\Web\Moora\KriteriaController;
+use App\Http\Controllers\Web\Moora\SubKriteriaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,3 +79,25 @@ Route::prefix('lembur')->name('lembur.')->group(function () {
     Route::put('/{id}', [LemburController::class, 'update'])->name('update');
     Route::delete('/{id}', [LemburController::class, 'destroy'])->name('destroy');
 });
+
+
+
+Route::get('kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
+Route::post('kriteriaStore', [KriteriaController::class, 'post'])->name('kriteria.post');
+Route::put('kriteriaPut/{id}', [KriteriaController::class, 'put'])->name('kriteria.put');
+Route::delete('kriteriaDelete/{id}', [KriteriaController::class, 'delete'])->name('kriteria.delete');
+
+Route::get('subKriteria/{id}', [SubKriteriaController::class, 'index'])->name('subKriteria.index');
+Route::post('subKriteriaStore', [SubKriteriaController::class, 'post'])->name('subKriteria.post');
+Route::put('subKriteriaPut/{id}', [SubKriteriaController::class, 'put'])->name('subKriteria.put');
+Route::delete('subKriteriaDelete/{id}', [SubKriteriaController::class, 'delete'])->name('subKriteria.delete');
+
+
+Route::get('penilaian', [PenilaianKaryawanController::class, 'index'])->name('penilaian.index');
+Route::get('/penilaian/jabatan/{id_jabatan}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaian.byJabatan');
+Route::get('/penilaian/jabatan/{jabatan_id}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaianKaryawan.filter');
+
+Route::post('penilaianKaryawanStore', [PenilaianKaryawanController::class, 'store'])->name('penilaianKaryawan.post');
+Route::put('penilaianKaryawanPut/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaianKaryawan.update');
+Route::delete('penilaianKaryawanDelete/{id}', [PenilaianKaryawanController::class, 'destroy'])->name('penilaianKaryawan.delete');
+Route::get('/rekap-keterlambatan/{bulan}/{tahun}', [PenilaianKaryawanController::class, 'rekapKeterlambatanBulanan']);
