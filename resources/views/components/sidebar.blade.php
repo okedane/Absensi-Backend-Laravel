@@ -85,7 +85,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{ route('jabatanHasil') }}">
                                 <i data-feather="bar-chart-2"></i>
                                 Hasil
                             </a>

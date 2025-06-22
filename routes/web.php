@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\Data\JabatanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Data\KaryawanController;
 use App\Http\Controllers\Web\Moora\KriteriaController;
+use App\Http\Controllers\Web\Moora\MooraController;
 use App\Http\Controllers\Web\Moora\SubKriteriaController;
 
 /*
@@ -101,3 +102,9 @@ Route::post('penilaianKaryawanStore', [PenilaianKaryawanController::class, 'stor
 Route::put('penilaianKaryawanPut/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaianKaryawan.update');
 Route::delete('penilaianKaryawanDelete/{id}', [PenilaianKaryawanController::class, 'destroy'])->name('penilaianKaryawan.delete');
 Route::get('/rekap-keterlambatan/{bulan}/{tahun}', [PenilaianKaryawanController::class, 'rekapKeterlambatanBulanan']);
+
+
+
+Route::get('/jabatanPeringkat', [MooraController::class, 'pilihJabatan'])->name('jabatanHasil');
+Route::get('/moora/hasil/{jabatan_id}', [MooraController::class, 'hasil'])->name('moora.hasil');
+

@@ -17,6 +17,7 @@ class SubKriteriaSeeder extends Seeder
             ['kriteria_id' => 1, 'nama' => 'Buruk',  'bobot' => 1, 'min_value' => 0, 'max_value' => 1],
             ['kriteria_id' => 1, 'nama' => 'Cukup', 'bobot' => 2, 'min_value' => 2, 'max_value' => 2],
             ['kriteria_id' => 1, 'nama' => 'Baik', 'bobot' => 3, 'min_value' => 3, 'max_value' => 3],
+            ['kriteria_id' => 1, 'nama' => 'Sangat Baik', 'bobot' => 4, 'min_value' => 4, 'max_value' => 4],
 
             // KETERLAMBATAN (kriteria_id = 2)
             ['kriteria_id' => 2, 'nama' => '<= 15 menit', 'bobot' => 1, 'min_value' => 0, 'max_value' => 15],

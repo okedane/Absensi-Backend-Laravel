@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             LokasiSeeder::class,
             IzinSeeder::class,
             JadwalKerjaSeeder::class,
+            LemburSeeder::class,
+            // PelanggaranSeeder::class,
             KriteriaSeeder::class,
             SubKriteriaSeeder::class,
             AbsensiSeeder::class,
