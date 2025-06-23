@@ -9,7 +9,7 @@
                 <li class="menu-title" data-key="t-menu">Menu </li>
 
                 <li>
-                    <a href="/">
+                    <a href="{{ route('dashboard.index') }}" class="waves-effect">
                         <i data-feather="home"></i>
                         <span data-key="t-dashboard">Dashboard</span>
                     </a>
@@ -94,7 +94,7 @@
                 </li>
 
                 <li>
-                    <a href="">
+                    <a href="{{ route('users.index') }}" class="waves-effect">
                         <i data-feather="users"></i>
                         <span data-key="t-dashboard">Management Akun</span>
                     </a>

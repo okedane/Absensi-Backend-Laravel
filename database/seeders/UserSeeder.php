@@ -53,6 +53,16 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'admin',
+                'email' => 'romadani.code@gmail.com',
+                'password' => bcrypt('12345678'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'remember_token' => \Illuminate\Support\Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
          

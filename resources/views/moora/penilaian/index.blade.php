@@ -25,7 +25,7 @@
                                     <select name="bulan" class="form-control" required>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <option value="{{ $i }}"
-                                                {{ request('bulan', now()->month) == $i ? 'selected' : '' }}>
+                                                {{ (string)request('bulan', now()->month) === (string)$i ? 'selected' : '' }}>
                                                 {{ DateTime::createFromFormat('!m', $i)->format('F') }}
                                             </option>
                                         @endfor
@@ -35,7 +35,7 @@
                                     <select name="tahun" class="form-control" required>
                                         @for ($y = now()->year; $y >= 2020; $y--)
                                             <option value="{{ $y }}"
-                                                {{ request('tahun', now()->year) == $y ? 'selected' : '' }}>
+                                                {{ (string)request('tahun', now()->year) === (string)$y ? 'selected' : '' }}>
                                                 {{ $y }}
                                             </option>
                                         @endfor
@@ -43,6 +43,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="{{ route('penilaianKaryawan.filter', $jabatan->id) }}" class="btn btn-secondary ms-1">Reset</a>
                                 </div>
                             </form>
                             <button type="button" class="btn btn-primary waves-effect waves-light mt-2 mt-md-0"

@@ -17,36 +17,37 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-Items-center">
-
-                            <form method="GET" action="{{ route('moora.hasil', $jabatan_id) }}" class="mb-4">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <select name="bulan" class="form-control" required>
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}"
-                                                    {{ $i == $bulan ? 'selected' : '' }}>
-                                                    {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select name="tahun" class="form-control" required>
-                                            @for ($y = now()->year; $y >= 2020; $y--)
-                                                <option value="{{ $y }}"
-                                                    {{ $y == $tahun ? 'selected' : '' }}>{{ $y }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary">Filter</button>
-                                    </div>
-                                </div>
-                            </form>
+                   
+                    <form method="GET" action="{{ route('moora.hasil', $jabatan_id) }}" class="row g-3 align-items-center mb-4">
+                        <div class="col-md-3">
+                            <label for="bulan" class="form-label mb-1">Bulan</label>
+                            <select name="bulan" id="bulan" class="form-select" required>
+                                @for ($i = 1; $i <= 12; $i++)
+                                    <option value="{{ $i }}" {{ $i == $bulan ? 'selected' : '' }}>
+                                        {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                                    </option>
+                                @endfor
+                            </select>
                         </div>
-                    </div>
+                        <div class="col-md-3">
+                            <label for="tahun" class="form-label mb-1">Tahun</label>
+                            <select name="tahun" id="tahun" class="form-select" required>
+                                @for ($y = now()->year; $y >= 2020; $y--)
+                                    <option value="{{ $y }}" {{ $y == $tahun ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end gap-2" style="margin-top: 39px;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-funnel"></i> Filter
+                            </button>
+                            <a href="{{ route('moora.hasil', $jabatan_id) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-clockwise"></i> Reset
+                            </a>
+                        </div>
+                    </form>
                     @if (!empty($matriksKeputusan))
                         <h2 class="mb-4">Matriks Keputusan</h2>
                         <table class="table table-bordered">

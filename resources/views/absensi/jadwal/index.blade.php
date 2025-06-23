@@ -135,16 +135,16 @@
                                                                         aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Apakah Anda yakin ingin menghapus Jadwal Kerja untuk
+                                                                    Apakah Anda yakin ingin menghapus Jadwal Kerja <br>
                                                                     <strong>{{ $item->karyawan->user->name }}</strong>
                                                                     bulan
                                                                     <strong>{{ \Carbon\Carbon::parse($item->bulan . '-01')->format('F Y') }}</strong>?
                                                                     <br><br>
-                                                                    <small class="text-warning">
+                                                                    {{-- <small class="text-warning">
                                                                         <i class="mdi mdi-alert-circle"></i>
                                                                         Ini akan menghapus semua jadwal kerja untuk
                                                                         karyawan ini dalam bulan tersebut.
-                                                                    </small>
+                                                                    </small> --}}
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"

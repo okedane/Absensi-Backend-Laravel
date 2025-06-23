@@ -19,7 +19,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">Daftar Kriteria</h4>
-                            <button type="button" class="btn btn-primary waves-effect waves-light"
+                            <button type="button" class=" waves-effect waves-light"
                                 data-bs-toggle="modal" data-bs-target="#myModal">
                                 <i class="mdi mdi-plus me-1"></i> Tambah Kriteria
                             </button>

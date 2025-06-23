@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="/" class="logo logo-dark">
+                <a href="{{ route('dashboard.index') }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/favicon.ico') }}" alt="" height="24">
                     </span>
@@ -13,7 +13,7 @@
                     </span>
                 </a>
 
-                <a href="/" class="logo logo-light">
+                <a href="{{ route('dashboard.index') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/favicon.ico') }}" alt="" height="24">
                     </span>
@@ -82,7 +82,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                    <a class="dropdown-item" href=""><i
+                    <a class="dropdown-item" href="{{ route('logout') }}"><i
                             class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                 </div>
             </div>
