@@ -4,6 +4,7 @@ use App\Http\Controllers\API\Absensi\JadwalKerjaController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Absensi\AbsensiController;
 use App\Http\Controllers\API\Absensi\IzinController;
+use App\Http\Controllers\Api\Absensi\LemburController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,12 +24,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -40,4 +35,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/absensi', [AbsensiController::class, 'store']);
      Route::get('/absensi/history', [AbsensiController::class, 'history']);
     Route::post('/izin', [IzinController::class, 'store']);
+    Route::get('/lembur', [LemburController::class, 'index']);
 });

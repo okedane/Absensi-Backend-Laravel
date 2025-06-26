@@ -32,6 +32,11 @@ class Karyawan extends Model
         return $this->hasMany(Absensi::class, 'karyawan_id');
     }
 
+    public function lemburs()
+    {
+        return $this->hasMany(Lembur::class, 'karyawan_id');
+    }
+
     public function izins()
     {
         return $this->hasMany(Izin::class, 'karyawan_id');

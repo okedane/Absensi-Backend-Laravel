@@ -18,7 +18,7 @@ class KaryawanController extends Controller
         return view('data.karyawa.index', compact('karyawan', 'jabatan'));
     }
 
-    public function post(Request $request)
+    public function store(Request $request)
     {
         try {
 
@@ -55,7 +55,7 @@ class KaryawanController extends Controller
     }
 
 
-    public function put(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $validated = $request->validate([
@@ -88,7 +88,7 @@ class KaryawanController extends Controller
 
 
 
-    public function delete($id)
+    public function destroy($id)
     {
         try {
 

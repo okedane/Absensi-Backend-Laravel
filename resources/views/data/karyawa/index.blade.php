@@ -61,7 +61,7 @@
                                                     </button>
 
                                                     <!-- Tombol Delete dengan Modal Konfirmasi -->
-                                                    <form action="{{ route('karyawan.delete', $item->id) }}"
+                                                    <form action="{{ route('karyawan.destroy', $item->id) }}"
                                                         method="POST" id="deleteForm{{ $item->id }}">
                                                         @csrf
                                                         @method('DELETE')
@@ -123,7 +123,7 @@
                                                                         aria-label="Close"></button>
                                                                 </div>
                                                                 <form class="needs-validation"
-                                                                    action="{{ route('karyawan.put', $item->id) }}"
+                                                                    action="{{ route('karyawan.update', $item->id) }}"
                                                                     method="POST" novalidate>
                                                                     @csrf
                                                                     @method('PUT')
@@ -227,7 +227,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form class="needs-validation" action="{{ route('karyawan.post') }}"
+                                    <form class="needs-validation" action="{{ route('karyawan.store') }}"
                                         method="POST" novalidate>
                                         @csrf
                                         <div class="mb-3">

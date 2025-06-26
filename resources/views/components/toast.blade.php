@@ -1,4 +1,4 @@
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+<div class="position-fixed top-0 end-0 mt-4 me-3" style="z-index: 11">
     <div id="liveToast" class="toast @if ($errors->any() || session('success') || session('error')) show @endif" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header
             @if(session('success')) bg-primary text-white

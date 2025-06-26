@@ -57,11 +57,9 @@ Route::middleware(['auth'])->group(function () {
 
     //prefik untuk karyawan
     Route::prefix('karyawan')->group(function () {
-        Route::get('/', [KaryawanController::class, 'index'])->name('karyawan.index');
-        Route::get('/create', [KaryawanController::class, 'create'])->name('karyawan.create');
+        Route::get('/{id}', [KaryawanController::class, 'index'])->name('karyawan.index');
         Route::post('/store', [KaryawanController::class, 'store'])->name('karyawan.store');
-        Route::get('/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
-        Route::put('/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
+        Route::put('edit/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
         Route::delete('/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
     });
   
