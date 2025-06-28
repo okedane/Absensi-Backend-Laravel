@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
 // logo-sm.svg
 
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::post('/forgot-password', [AuthController::class, 'apiForgot']);
+Route::post('/verify-code', [AuthController::class, 'apiVerifyCode']);
+Route::post('/reset-password', [AuthController::class, 'apiResetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
@@ -31,9 +33,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/jadwal-kerja', [JadwalKerjaController::class, 'index']);
     Route::get('/jadwal-kerja/hari-ini', [JadwalKerjaController::class, 'jadwalHariIni']);
     //Absensi
-    //  Route::get('/absensi', [AbsensiController::class, 'index']);
+
     Route::post('/absensi', [AbsensiController::class, 'store']);
-     Route::get('/absensi/history', [AbsensiController::class, 'history']);
-    Route::post('/izin', [IzinController::class, 'store']);
+    Route::get('/absensi/history', [AbsensiController::class, 'history']);
+
+    Route::get('/izin', [IzinController::class, 'index']);
+    Route::post('/izin/store', [IzinController::class, 'store']);
+    Route::put('/izin/update/{id}', [IzinController::class, 'update']);
+    Route::delete('/izin/delete/{id}', [IzinController::class, 'destroy']);
+
     Route::get('/lembur', [LemburController::class, 'index']);
 });

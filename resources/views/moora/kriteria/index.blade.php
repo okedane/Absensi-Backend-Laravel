@@ -46,7 +46,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->kode }}</td>
                                 <td>{{ $item->nama }}</td>
-                                <td>{{ $item->bobot }}%</td>
+                                <td>{{ (float) $item->bobot * 1 == (int) $item->bobot ? (int) $item->bobot : rtrim(rtrim(number_format($item->bobot, 2, '.', ''), '0'), '.') }}%</td>
                                 <td>{{ $item->sifat }}</td>
                                 <td style="text-align: center; width: 100px;">
                                     <div class="d-flex justify-content-center gap-2">

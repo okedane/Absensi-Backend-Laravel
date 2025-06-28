@@ -130,8 +130,6 @@ class AbsensiController extends Controller
     }
 
 
-    //  /api/absensi/history?bulan=6&tahun=2025
-    
 
     public function history(Request $request)
     {
@@ -145,18 +143,11 @@ class AbsensiController extends Controller
             ], 404);
         }
 
-        // Opsional: filter bulan & tahun
-        $query = $karyawan->absensis()->with(['jadwalKerja', 'izin'])->orderBy('tanggal', 'desc');
-
-        if ($request->has('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
-        }
-
-        if ($request->has('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
-        }
-
-        $absensi = $query->get();
+        // Ambil semua absensi, urutkan dari terbaru
+        $absensi = $karyawan->absensis()
+            ->with(['jadwalKerja', 'izin'])
+            ->orderBy('tanggal', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,

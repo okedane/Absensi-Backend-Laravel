@@ -30,28 +30,35 @@ class IzinController extends Controller
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'jenis_izin' => 'required|in:sakit,cuti,lainnya',
             'alasan' => 'nullable|string',
-            // file dokumen bisa ditambah nanti
         ]);
 
-        $today = Carbon::now()->toDateString();
         $karyawanId = $request->user()->karyawan->id;
 
-        $izin = Izin::where('karyawan_id', $karyawanId)
-            ->where('status', 'disetujui')
-            ->whereDate('tanggal_mulai', '<=', $today)
-            ->whereDate('tanggal_selesai', '>=', $today)
+        // Tambahkan pengecekan izin bentrok
+        $izinBentrok = Izin::where('karyawan_id', $karyawanId)
+            ->where(function ($query) use ($validated) {
+                $query
+                    ->whereBetween('tanggal_mulai', [$validated['tanggal_mulai'], $validated['tanggal_selesai']])
+                    ->orWhereBetween('tanggal_selesai', [$validated['tanggal_mulai'], $validated['tanggal_selesai']])
+                    ->orWhere(function ($q) use ($validated) {
+                        $q->where('tanggal_mulai', '<=', $validated['tanggal_mulai'])->where('tanggal_selesai', '>=', $validated['tanggal_selesai']);
+                    });
+            })
             ->exists();
 
-        if ($izin) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Hari ini Anda sedang dalam status izin, tidak perlu absen.'
-            ], 400);
+        if ($izinBentrok) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Anda sudah mengajukan izin pada rentang tanggal tersebut.',
+                ],
+                400,
+            );
         }
 
-
+        // Simpan izin jika aman
         $izin = Izin::create([
-            'karyawan_id' => $request->user()->karyawan->id,
+            'karyawan_id' => $karyawanId,
             'tanggal_mulai' => $validated['tanggal_mulai'],
             'tanggal_selesai' => $validated['tanggal_selesai'],
             'jenis_izin' => $validated['jenis_izin'],
@@ -63,6 +70,89 @@ class IzinController extends Controller
             'success' => true,
             'message' => 'Pengajuan izin berhasil disimpan.',
             'data' => $izin,
+        ]);
+    }
+
+    // PUT /api/izin/{id}
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+            'jenis_izin' => 'required|in:sakit,cuti,lainnya',
+            'alasan' => 'nullable|string',
+        ]);
+
+        $izin = Izin::where('id', $id)
+            ->where('karyawan_id', $request->user()->karyawan->id)
+            ->first();
+
+        if (!$izin) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Data izin tidak ditemukan',
+                ],
+                404,
+            );
+        }
+
+        if ($izin->status === 'disetujui') {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Izin yang sudah disetujui tidak dapat diubah',
+                ],
+                400,
+            );
+        }
+
+        $izin->update([
+            'tanggal_mulai' => $validated['tanggal_mulai'],
+            'tanggal_selesai' => $validated['tanggal_selesai'],
+            'jenis_izin' => $validated['jenis_izin'],
+            'alasan' => $validated['alasan'] ?? null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Izin berhasil diperbarui',
+            'data' => $izin,
+        ]);
+    }
+
+    // DELETE /api/izin/{id}
+    public function destroy(Request $request, $id)
+    {
+        $izin = Izin::where('id', $id)
+            ->where('karyawan_id', $request->user()->karyawan->id)
+            ->first();
+
+        if (!$izin) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Data izin tidak ditemukan',
+                ],
+                404,
+            );
+        }
+
+        if ($izin->status === 'disetujui') {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Izin yang sudah disetujui tidak dapat dihapus',
+                ],
+                400,
+            );
+        }
+
+        $izin->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Izin berhasil dihapus',
         ]);
     }
 }

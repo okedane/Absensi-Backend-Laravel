@@ -38,9 +38,9 @@ Route::middleware(['guest'])->group(function () {
     Route::post('reset-password-proses', [AuthController::class, 'reset_password_proses'])->name('reset-password-proses');
 });
 
-Route::get('/home', function () {
-    return redirect()->route('/dashboard');
-});
+// Route::get('/home', function () {
+//     return redirect()->route('/dashboard');
+// });
 
 
 Route::middleware(['auth'])->group(function () {
@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('edit/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
         Route::delete('/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
     });
-  
+
     // Routes untuk Jadwal Kerja
     Route::prefix('jadwal-kerja')->group(function () {
         Route::get('/', [JadwalKerjaController::class, 'index'])->name('jadwal-kerja.index');
@@ -147,5 +147,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('moora')->group(function () {
         Route::get('/jabatanPeringkat', [MooraController::class, 'pilihJabatan'])->name('jabatanHasil');
         Route::get('/moora/hasil/{jabatan_id}', [MooraController::class, 'hasil'])->name('moora.hasil');
+
+        Route::get('/jabatanhasul', [MooraController::class, 'pilihJabatanAkhir'])->name('JabatanHasilAKhir');
+        Route::get('/moora/peringkat/{jabatan_id}', [MooraController::class, 'hasilAkhir'])->name('moora.hasilAKhir');
     });
 });

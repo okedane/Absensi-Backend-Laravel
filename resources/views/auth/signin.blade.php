@@ -48,7 +48,7 @@
                                             class="form-control @error('password') is-invalid @enderror" name="password"
                                             placeholder="Enter password" aria-label="Password"
                                             aria-describedby="password-addon">
-                                       
+
                                         <button class="btn btn-light shadow-none ms-0" type="button"
                                             id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                     </div>
@@ -67,8 +67,9 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log
-                                        In</button>
+                                    <button class="btn w-100 waves-effect waves-light" type="submit" style="background-color: #ff797a; border-color: #ff797a; color: #fff;">
+                                        Log In
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -88,7 +89,7 @@
         <!-- end col -->
         <div class="col-xxl-9 col-lg-8 col-md-7">
             <div class="auth-bg pt-md-5 p-4 d-flex">
-                <div class="bg-overlay bg-primary"></div>
+                <div class="bg-overlay" style="background-color: #ff797a;"></div>
                 <ul class="bg-bubbles">
                     <li></li>
                     <li></li>
@@ -102,7 +103,53 @@
                     <li></li>
                 </ul>
                 <!-- end bubble effect -->
-                <div class="bg-pattern"></div>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-xl-7">
+                        <div class="p-0 p-sm-4 px-xl-0">
+                            <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <div class="testi-contain text-white">
+                                            <i class="bx bxs-quote-alt-left text-success display-6"></i>
+
+                                            <h4 class="mt-4 fw-medium lh-base text-white">“Melita Kitchen bukan sekadar
+                                                tempat makan, tapi pengalaman kuliner yang memanjakan lidah dan hati.
+                                                Menu variatif dan pelayanan ramah membuat saya ingin selalu kembali.”
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div class="testi-contain text-white">
+                                            <i class="bx bxs-quote-alt-left text-success display-6"></i>
+
+                                            <h4 class="mt-4 fw-medium lh-base text-white">“Sistem penilaian karyawan
+                                                berbasis MOORA yang diterapkan di Melita Kitchen sangat adil dan
+                                                transparan. Kinerja kami dihargai secara objektif, memotivasi untuk
+                                                terus berkembang.”</h4>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div class="testi-contain text-white">
+                                            <i class="bx bxs-quote-alt-left text-success display-6"></i>
+
+                                            <h4 class="mt-4 fw-medium lh-base text-white">“Bekerja di Melita Kitchen
+                                                memberikan saya kesempatan untuk bertumbuh. Penilaian berkala dengan
+                                                metode MOORA membuat kontribusi setiap karyawan terasa bermakna.”</h4>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end carousel-inner -->
+                            </div>
+                            <!-- end review carousel -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- end col -->

@@ -86,8 +86,14 @@
                         </li>
                         <li>
                             <a href="{{ route('jabatanHasil') }}">
-                                <i data-feather="bar-chart-2"></i>
-                                Hasil
+                                <i data-feather="activity"></i>
+                                Rumus
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('JabatanHasilAKhir') }}">
+                                <i data-feather="award"></i>
+                                Hasil 
                             </a>
                         </li>
                     </ul>
