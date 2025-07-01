@@ -14,12 +14,12 @@ class IzinSeeder extends Seeder
     public function run(): void
     {
         DB::table('izins')->insert([
-            'karyawan_id'=> 1,
-            'tanggal_mulai' => '2025-11-01',
-            'tanggal_selesai' => '2025-12-01',
-            'jenis_izin'=> 'sakit',
-            'alasan' => 'Saya sakit tenggorokan',
-            'status' => 'pending',
+            'karyawan_id'=> 9,
+            'tanggal_mulai' => '2025-01-01',
+            'tanggal_selesai' => '2025-01-15',
+            'jenis_izin'=> 'cuti',
+            'alasan' => 'Cuti Lahiran',
+            'status' => 'disetujui',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

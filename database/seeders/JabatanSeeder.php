@@ -12,29 +12,19 @@ class JabatanSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Test',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Kasir',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Waiter',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Chef',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Security',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Admin',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Barista',
-        ]);
-        \App\Models\Jabatan::create([
-            'nama_jabatan' => 'Kurir',
-        ]);
+        $jabatanList = [
+            'Chef',
+            'Administrasi',
+            'Waiters',
+            'Barista',
+            'Security',
+            'Kurir',
+        ];
+
+        foreach ($jabatanList as $namaJabatan) {
+            \App\Models\Jabatan::create([
+                'nama_jabatan' => $namaJabatan,
+            ]);
+        }
     }
 }

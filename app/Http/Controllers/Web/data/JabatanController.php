@@ -51,4 +51,6 @@ class JabatanController extends Controller
 
         return back()->with('success', 'data telah dihapus');
     }
+
+    
 }

@@ -95,7 +95,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data['nama_karyawan'] }}</td>
                                         @foreach ($data['normalisasi'] as $nilai)
-                                            <td>{{ number_format($nilai, 4) }}</td>
+                                            <td>{{ number_format($nilai, 9, ',', '') }}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
@@ -124,7 +124,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data['nama_karyawan'] }}</td>
                                         @foreach ($data['terbobot'] as $nilai)
-                                            <td>{{ number_format($nilai, 6) }}</td>
+                                            <td>{{ number_format($nilai, 6, '.', '') }}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
@@ -154,9 +154,9 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $data['nama_karyawan'] }}</td>
-                                    <td>{{ number_format($data['max'], 6) }}</td>
-                                    <td>{{ number_format($data['min'], 6) }}</td>
-                                    <td>{{ number_format($data['yi'], 6) }}</td>
+                                    <td>{{ number_format($data['max'],  9, ',', '') }}</td>
+                                    <td>{{ number_format($data['min'],  9, ',', '') }}</td>
+                                    <td>{{ $data['yi'] }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

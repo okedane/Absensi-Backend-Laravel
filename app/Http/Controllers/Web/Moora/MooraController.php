@@ -77,13 +77,19 @@ class MooraController extends Controller
         foreach ($matriksTerbobot as $data) {
             $benefit = $cost = 0;
             foreach ($data['terbobot'] as $kriteria_id => $nilai) {
-                $sifat = $kriterias->firstWhere('id', $kriteria_id)->sifat;
+                // $sifat = $kriterias->firstWhere('id', $kriteria_id)->sifat;
+                $sifat = strtolower($kriterias->firstWhere('id', $kriteria_id)->sifat);
+
+                // $sifat = strtolower($mapKriteria[$kriteria_id]->sifat ?? 'benefit');
                 if ($sifat === 'benefit') {
                     $benefit += $nilai;
                 } else {
                     $cost += $nilai;
                 }
             }
+            
+
+
             $hasilMoora[] = [
                 'nama_karyawan' => $data['nama_karyawan'],
                 'max' => $benefit,

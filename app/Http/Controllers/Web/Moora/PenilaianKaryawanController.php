@@ -115,10 +115,83 @@ class PenilaianKaryawanController extends Controller
         return back()->with('success', 'Penilaian berhasil disimpan.');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $karyawan_id)
     {
-        return $this->store($request); // Sederhanakan update dengan menggunakan logika store
+        $validated = $request->validate([
+            'penilaian' => 'required|array',
+            'penilaian.*' => 'nullable|numeric',
+            'bulan' => 'required|integer|min:1|max:12',
+            'tahun' => 'required|integer|min:2000|max:2100',
+        ]);
+
+        $karyawan = Karyawan::findOrFail($karyawan_id);
+        $bulan = $validated['bulan'];
+        $tahun = $validated['tahun'];
+        $kriterias = Kriteria::with('subKriterias')->get();
+
+        foreach ($kriterias as $kriteria) {
+            $kriteria_id = $kriteria->id;
+            $nilai = null;
+
+            if (strtolower($kriteria->nama) === 'keterlambatan') {
+                $totalMenit = Absensi::where('karyawan_id', $karyawan->id)
+                    ->whereMonth('tanggal', $bulan)
+                    ->whereYear('tanggal', $tahun)
+                    ->sum('keterlambatan');
+
+                $subKriteria = $kriteria->subKriterias()
+                    ->where('min_value', '<=', $totalMenit)
+                    ->where('max_value', '>=', $totalMenit)
+                    ->first();
+
+                $nilai = $subKriteria ? $subKriteria->bobot : 0;
+            } else if (strtolower($kriteria->nama) === 'lembur') {
+                $totalJam = Lembur::where('karyawan_id', $karyawan->id)
+                    ->whereMonth('tanggal', $bulan)
+                    ->whereYear('tanggal', $tahun)
+                    ->sum('total_jam');
+
+                $subKriteria = $kriteria->subKriterias()
+                    ->where('min_value', '<=', $totalJam)
+                    ->where('max_value', '>=', $totalJam)
+                    ->first();
+
+                $nilai = $subKriteria ? $subKriteria->bobot : 0;
+            } else {
+                if (!isset($validated['penilaian'][$kriteria_id])) continue;
+
+                $nilaiInput = $validated['penilaian'][$kriteria_id];
+
+                $subKriteria = $kriteria->subKriterias()
+                    ->where('min_value', '<=', $nilaiInput)
+                    ->where('max_value', '>=', $nilaiInput)
+                    ->first();
+
+                $nilai = $nilaiInput;
+            }
+
+            if (!$subKriteria) {
+                return back()->with('error', "Sub kriteria tidak ditemukan untuk kriteria: {$kriteria->nama}");
+            }
+
+            PenilaianKaryawan::updateOrCreate(
+                [
+                    'karyawan_id' => $karyawan->id,
+                    'kriteria_id' => $kriteria_id,
+                    'bulan' => $bulan,
+                    'tahun' => $tahun,
+                ],
+                [
+                    'nilai' => $nilai,
+                    'sub_kriteria_id' => $subKriteria->id,
+                ]
+            );
+        }
+
+        return back()->with('success', 'Penilaian berhasil diperbarui.');
     }
+
+
 
     public function destroy($karyawan_id)
     {

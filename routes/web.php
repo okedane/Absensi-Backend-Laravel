@@ -139,7 +139,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/jabatan/{id_jabatan}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaian.byJabatan');
         Route::get('/jabatan/filter/{jabatan_id}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaianKaryawan.filter');
         Route::post('/store', [PenilaianKaryawanController::class, 'store'])->name('penilaianKaryawan.post');
-        Route::put('/update/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaianKaryawan.update');
+        Route::put('/update/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaian.update');
         Route::delete('/delete/{id}', [PenilaianKaryawanController::class, 'destroy'])->name('penilaianKaryawan.delete');
         Route::get('/rekap-keterlambatan/{bulan}/{tahun}', [PenilaianKaryawanController::class, 'rekapKeterlambatanBulanan'])->name('penilaianKaryawan.rekapKeterlambatan');
     });
