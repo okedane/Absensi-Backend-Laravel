@@ -7,7 +7,7 @@
                         <h4 class="mb-sm-0 font-size-18">MOORA</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('JabatanHasilAKhir') }}">Jabatan</a></li>
                                 <li class="breadcrumb-item active">MOORA</li>
                             </ol>
                         </div>
@@ -15,8 +15,9 @@
                 </div>
             </div>
 
-            <form method="GET" action="{{ route('moora.hasilAKhir', $jabatan_id) }}" class="row g-3 align-items-center mb-4">
-                <div class="col-md-3">
+            <form method="GET" action="{{ route('moora.hasilAKhir', $jabatan_id) }}"
+                class="row g-3 align-items-center mb-4">
+                <div class="col-md-4">
                     <label for="bulan" class="form-label mb-1">Bulan</label>
                     <select name="bulan" id="bulan" class="form-select" required>
                         @for ($i = 1; $i <= 12; $i++)
@@ -26,11 +27,12 @@
                         @endfor
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="tahun" class="form-label mb-1">Tahun</label>
                     <select name="tahun" id="tahun" class="form-select" required>
                         @for ($y = now()->year; $y >= 2020; $y--)
-                            <option value="{{ $y }}" {{ $y == $tahun ? 'selected' : '' }}>{{ $y }}</option>
+                            <option value="{{ $y }}" {{ $y == $tahun ? 'selected' : '' }}>{{ $y }}
+                            </option>
                         @endfor
                     </select>
                 </div>
@@ -38,8 +40,13 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-funnel"></i> Filter
                     </button>
-                    <a href="{{ route('moora.hasil', $jabatan_id) }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('moora.hasilAKhir', $jabatan_id) }}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-clockwise"></i> Reset
+                    </a>
+
+                    <a href="{{ route('moora.cetakPDF', ['jabatan_id' => $jabatan_id, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
+                        target="_blank" class="btn btn-success">
+                        <i class="bi bi-printer"></i> Cetak PDF
                     </a>
                 </div>
             </form>
@@ -49,7 +56,7 @@
                 <table class="table table-bordered">
                     <thead class="thead-dark">
                         <tr>
-                            <th>No</th>
+                            <th>Rangking</th>
                             <th>Nama Karyawan</th>
                             <th>Nilai Akhir </th>
                         </tr>
@@ -57,9 +64,9 @@
                     <tbody>
                         @foreach ($hasilMoora as $index => $data)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $data['ranking'] }}</td>
                                 <td>{{ $data['nama_karyawan'] }}</td>
-                                <td>{{ number_format($data['yi'], 4) }}</td> {{-- 🔧 gunakan key 'yi' --}}
+                                <td>{{ number_format($data['yi'], 4) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

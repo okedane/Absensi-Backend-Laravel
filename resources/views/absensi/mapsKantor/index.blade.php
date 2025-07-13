@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                                 <tr>
                                     <th style="width:20px">No</th>
@@ -130,6 +130,14 @@
                                                                     @method('PUT')
                                                                     <div class="modal-body">
 
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label">Pilih Lokasi di
+                                                                                Map</label>
+                                                                            <div id="editMap{{ $item->id }}"
+                                                                                style="height: 300px;"></div>
+                                                                        </div>
+
+
                                                                         <!-- Nama -->
                                                                         <div class="mb-3">
                                                                             <label class="form-label"
@@ -168,22 +176,23 @@
 
                                                                         <div class="mb-3">
                                                                             <label class="form-label"
-                                                                                for="radius_meter">Radius (meter)</label>
+                                                                                for="radius_meter">Radius
+                                                                                (meter)
+                                                                            </label>
                                                                             <input type="number" class="form-control"
                                                                                 id="radius_meter" name="radius_meter"
-                                                                                value="{{ $item->radius_meter }}" required>
+                                                                                value="{{ $item->radius_meter }}"
+                                                                                required>
                                                                             <div class="invalid-feedback">Radius
                                                                                 harus
                                                                                 diisi.</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button"
-                                                                            class="btn btn-secondary waves-effect"
-                                                                            data-bs-dismiss="modal">Tutup</button>
+                                                                        {{-- <button type="reset" --}}
+                                                                            {{-- class="btn btn-secondary">Reset</button> --}}
                                                                         <button type="submit"
-                                                                            class="btn btn-primary waves-effect waves-light">Simpan
-                                                                            Perubahan</button>
+                                                                            class="btn btn-primary">Simpan</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -220,6 +229,11 @@
                                         method="POST" novalidate>
                                         @csrf
                                         <div class="mb-3">
+                                            <label class="form-label">Pilih Lokasi di Map</label>
+                                            <div id="createMap" style="height: 300px;"></div>
+                                        </div>
+
+                                        <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">Nama Lokasi</label>
                                             <input type="text" class="form-control" id="validationCustom01"
                                                 placeholder="Masukkan Nama Lokasi" name="nama_lokasi" required>
@@ -247,13 +261,16 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="radius_meter">Radius (meter)</label>
-                                            <input type="number" class="form-control" id="radius_meter" name="radius_meter"
-                                                placeholder="Masukkan Radius Lokasi" required>
+                                            <input type="number" class="form-control" id="radius_meter"
+                                                name="radius_meter" placeholder="Masukkan Radius Lokasi" required>
                                             <div class="invalid-feedback">
                                                 Radius harus diisi
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                        <div class="modal-footer">
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -265,5 +282,68 @@
             </div><!-- end card-body -->
         </div><!-- end card -->
     </div>
+    <script>
+        // ==========================
+        // === Map for Create Modal ===
+        // ==========================
+        let createMap = L.map('createMap').setView([-6.2, 106.8], 13); // default Jakarta
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(createMap);
+
+        let createMarker;
+
+        createMap.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(6);
+            const lng = e.latlng.lng.toFixed(6);
+
+            if (createMarker) {
+                createMap.removeLayer(createMarker);
+            }
+
+            createMarker = L.marker([lat, lng]).addTo(createMap);
+            document.getElementById('validationCustom02').value = lat;
+            document.getElementById('validationCustom03').value = lng;
+        });
+
+        // Perbaikan agar peta tampil saat modal dibuka
+        document.querySelector('[data-bs-target="#myModal"]').addEventListener('click', function() {
+            setTimeout(() => {
+                createMap.invalidateSize();
+            }, 500);
+        });
+
+
+        // ==========================
+        // === Maps for Edit Modals ===
+        // ==========================
+        @foreach ($LokasiRestoran as $item)
+            const editMap{{ $item->id }} = L.map('editMap{{ $item->id }}').setView([{{ $item->latitude }},
+                {{ $item->longitude }}
+            ], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(editMap{{ $item->id }});
+            let marker{{ $item->id }} = L.marker([{{ $item->latitude }}, {{ $item->longitude }}]).addTo(
+                editMap{{ $item->id }});
+
+            editMap{{ $item->id }}.on('click', function(e) {
+                const lat = e.latlng.lat.toFixed(6);
+                const lng = e.latlng.lng.toFixed(6);
+
+                marker{{ $item->id }}.setLatLng([lat, lng]);
+                document.querySelector('#editModal{{ $item->id }} input[name="latitude"]').value = lat;
+                document.querySelector('#editModal{{ $item->id }} input[name="longitude"]').value = lng;
+            });
+
+            // Pastikan map tampil ketika modal dibuka
+            document.querySelector('[data-bs-target="#editModal{{ $item->id }}"]').addEventListener('click',
+                function() {
+                    setTimeout(() => {
+                        editMap{{ $item->id }}.invalidateSize();
+                    }, 500);
+                });
+        @endforeach
+    </script>
 
 </x-app>

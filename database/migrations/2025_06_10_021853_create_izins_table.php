@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Izin;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->foreignId('karyawan_id')->constrained('karyawans')->onDelete('cascade'); // Foreign key to karyawans table
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
-            $table->enum('jenis_izin', ['sakit', 'cuti', 'lainnya']);
+            $table->enum('jenis_izin', ['sakit', 'cuti', 'izin', 'dispensasi', 'lainnya']);
             $table->text('alasan')->nullable(); // Nullable to allow for future updates
             $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->string('dokumen')->nullable(); // Nullable to allow for future updates

@@ -21,7 +21,8 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">Jabatan {{ $jabatan->nama_jabatan }}</h5>
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 <i class="mdi mdi-plus"></i> Tambah Karyawan
                             </button>
                         </div>
@@ -139,22 +140,13 @@
                                                                             <div class="invalid-feedback">NK harus
                                                                                 diisi.</div>
                                                                         </div>
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                for="tanggal_masuk">Tanggal Masuk</label>
-                                                                            <input type="date" class="form-control"
-                                                                                id="tanggal_masuk"
-                                                                                name="tanggal_masuk"
-                                                                                value="{{ $item->tanggal_masuk }}"
-                                                                                required>
-                                                                        </div>
+
                                                                         <!-- Nama -->
                                                                         <div class="mb-3">
                                                                             <label class="form-label"
                                                                                 for="nama">Nama</label>
                                                                             <input type="text" class="form-control"
-                                                                                id="name"
-                                                                                name="name"
+                                                                                id="name" name="name"
                                                                                 value="{{ $item->user->name ?? '' }}"
                                                                                 required>
                                                                             <div class="invalid-feedback">Nama harus
@@ -173,7 +165,7 @@
                                                                                 valid dan diisi.</div>
                                                                         </div>
 
-                                                                        <!-- Password -->
+                                                                        {{-- <!-- Password -->
                                                                         <div class="mb-3">
                                                                             <label class="form-label"
                                                                                 for="password">Password
@@ -183,7 +175,7 @@
                                                                                 name="password"
                                                                                 placeholder="Biarkan kosong jika tidak ingin mengganti">
                                                                         </div>
-                                                                        <input type="hidden" name="jabatan_id" value="{{ $jabatan->id }}">
+                                                                        <input type="hidden" name="jabatan_id" value="{{ $jabatan->id }}"> --}}
 
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -230,14 +222,14 @@
                                     <form class="needs-validation" action="{{ route('karyawan.store') }}"
                                         method="POST" novalidate>
                                         @csrf
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">nomor Karyawan</label>
                                             <input type="text" class="form-control" id="validationCustom01"
                                                 placeholder="Masukkan Nomor Karyawan" name="nomor_karyawan" required>
                                             <div class="invalid-feedback">
                                                 Nomor karyawan harus diisi
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">Nama Karyawan</label>
                                             <input type="text" class="form-control" id="validationCustom01"
@@ -246,14 +238,7 @@
                                                 Nama karyawan harus diisi
                                             </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="validationCustom01">Tanggal Masuk</label>
-                                            <input type="date" class="form-control" id="validationCustom01"
-                                                placeholder="Masukkan Tanggal Masuk" name="tanggal_masuk" required>
-                                            <div class="invalid-feedback">
-                                                Tanggal masuk harus diisi
-                                            </div>
-                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom02">Email</label>
                                             <input type="email" class="form-control" id="validationCustom02"
@@ -262,20 +247,51 @@
                                                 Email harus diisi dan formatnya benar
                                             </div>
                                         </div>
+                                        <!-- Password -->
                                         <div class="mb-3">
-                                            <label class="form-label" for="validationCustom03">Password</label>
-                                            <input type="password" class="form-control" id="validationCustom03"
-                                                placeholder="Masukkan Password" name="password" required>
+                                            <label class="form-label" for="password1">Password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password1"
+                                                    placeholder="Masukkan Password" name="password" required>
+
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    id="togglePassword1">
+                                                    <i class="mdi mdi-eye-outline" id="toggleIcon1"></i>
+                                                </button>
+                                            </div>
                                             <div class="invalid-feedback">
                                                 Password harus diisi
                                             </div>
                                         </div>
 
+                                        <!-- Konfirmasi Password -->
+                                        <div class="mb-3">
+                                            <label class="form-label" for="password2">Konfirmasi Password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password2"
+                                                    placeholder="Masukkan Ulang Password" name="password_confirmation"
+                                                    required>
+
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    id="togglePassword2">
+                                                    <i class="mdi mdi-eye-outline" id="toggleIcon2"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Password harus diisi
+                                            </div>
+                                        </div>
+
+
+
                                         <input type="hidden" name="role" value="karyawan">
                                         <input type="hidden" name="jabatan_id" value="{{ $jabatan->id }}">
 
 
-                                        <button class="btn btn-primary" type="submit">Tambah Karyawan</button>
+                                        <div class="modal-footer">
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -285,6 +301,7 @@
             </div><!-- end card-body -->
         </div><!-- end card -->
     </div>
+
 
 
 </x-app>

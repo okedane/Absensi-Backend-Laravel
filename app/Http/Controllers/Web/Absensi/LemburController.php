@@ -63,7 +63,7 @@ class LemburController extends Controller
                 'karyawan_id' => 'required|exists:karyawans,id',
                 'tanggal' => 'required|date',
                 'jam_mulai' => 'required|date_format:H:i',
-                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+                'jam_selesai' => 'required|date_format:H:i',
             ], [
                 'karyawan_id.required' => 'Karyawan harus dipilih',
                 'karyawan_id.exists' => 'Karyawan tidak valid',
@@ -76,10 +76,15 @@ class LemburController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus lebih besar dari jam mulai',
             ]);
 
-            // Hitung total jam
             $jamMulai = Carbon::createFromFormat('H:i', $request->jam_mulai);
             $jamSelesai = Carbon::createFromFormat('H:i', $request->jam_selesai);
-            $totalJam = $jamSelesai->diffInHours($jamMulai);
+
+            if ($jamSelesai->lessThanOrEqualTo($jamMulai)) {
+                $jamSelesai->addDay(); // handle lembur lintas hari
+            }
+
+            $totalJam = $jamMulai->diffInHours($jamSelesai);
+
 
             Lembur::create([
                 'karyawan_id' => $request->karyawan_id,
@@ -111,7 +116,7 @@ class LemburController extends Controller
                 'karyawan_id' => 'required|exists:karyawans,id',
                 'tanggal' => 'required|date',
                 'jam_mulai' => 'required|date_format:H:i',
-                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+                'jam_selesai' => 'required|date_format:H:i',
             ], [
                 'karyawan_id.required' => 'Karyawan harus dipilih',
                 'karyawan_id.exists' => 'Karyawan tidak valid',
@@ -129,7 +134,13 @@ class LemburController extends Controller
             // Hitung total jam
             $jamMulai = Carbon::createFromFormat('H:i', $request->jam_mulai);
             $jamSelesai = Carbon::createFromFormat('H:i', $request->jam_selesai);
-            $totalJam = $jamSelesai->diffInHours($jamMulai);
+            if ($jamSelesai->lessThanOrEqualTo($jamMulai)) {
+                // jam_selesai lewat tengah malam, tambahkan 1 hari
+                $jamSelesai->addDay();
+            }
+
+            $totalJam = $jamMulai->diffInHours($jamSelesai);
+
 
             $lembur->update([
                 'karyawan_id' => $request->karyawan_id,

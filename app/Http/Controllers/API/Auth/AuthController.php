@@ -42,6 +42,12 @@ class AuthController extends Controller
         ]);
     }
 
+
+
+
+
+
+    
     public function me(Request $request)
     {
         $user = $request->user()->load('karyawan.jabatan');

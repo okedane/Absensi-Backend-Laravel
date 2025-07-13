@@ -20,7 +20,12 @@ class PenilaianKaryawanController extends Controller
         $tahun = $request->tahun ?? now()->year;
 
         $jabatan = Jabatan::findOrFail($jabatan_id);
-        $karyawans = Karyawan::where('jabatan_id', $jabatan_id)->get();
+        $karyawans = Karyawan::where('jabatan_id', $jabatan_id)
+            ->whereDoesntHave('penilaians', function ($q) use ($bulan, $tahun) {
+                $q->where('bulan', $bulan)->where('tahun', $tahun);
+            })
+            ->get();
+
         $kriterias = Kriteria::with('subKriterias')->get();
 
         $penilaian = PenilaianKaryawan::whereHas('karyawan', function ($query) use ($jabatan_id) {
@@ -33,7 +38,6 @@ class PenilaianKaryawanController extends Controller
 
         return view('moora.penilaian.index', compact('karyawans', 'kriterias', 'jabatan', 'penilaian', 'bulan', 'tahun'));
     }
-
 
     public function store(Request $request)
     {
@@ -57,39 +61,26 @@ class PenilaianKaryawanController extends Controller
 
             if (strtolower($kriteria->nama) === 'keterlambatan') {
                 // Ambil total keterlambatan dari absensi
-                $totalMenit = \App\Models\Absensi::where('karyawan_id', $karyawan->id)
-                    ->whereMonth('tanggal', $bulan)
-                    ->whereYear('tanggal', $tahun)
-                    ->sum('keterlambatan');
+                $totalMenit = Absensi::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('keterlambatan');
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $totalMenit)
-                    ->where('max_value', '>=', $totalMenit)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $totalMenit)->where('max_value', '>=', $totalMenit)->first();
 
                 $nilai = $subKriteria ? $subKriteria->bobot : 0;
-            } else if (strtolower($kriteria->nama) === 'lembur') {
-                $totalJam = \App\Models\Lembur::where('karyawan_id', $karyawan->id)
-                    ->whereMonth('tanggal', $bulan)
-                    ->whereYear('tanggal', $tahun)
-                    ->sum('total_jam');
+            } elseif (strtolower($kriteria->nama) === 'lembur') {
+                $totalJam = Lembur::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('total_jam');
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $totalJam)
-                    ->where('max_value', '>=', $totalJam)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $totalJam)->where('max_value', '>=', $totalJam)->first();
 
                 $nilai = $subKriteria ? $subKriteria->bobot : 0;
             } else {
                 // Ambil dari input user biasa
-                if (!isset($validated['penilaian'][$kriteria_id])) continue;
+                if (!isset($validated['penilaian'][$kriteria_id])) {
+                    continue;
+                }
 
                 $nilaiInput = $validated['penilaian'][$kriteria_id];
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $nilaiInput)
-                    ->where('max_value', '>=', $nilaiInput)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $nilaiInput)->where('max_value', '>=', $nilaiInput)->first();
 
                 $nilai = $nilaiInput;
             }
@@ -108,12 +99,15 @@ class PenilaianKaryawanController extends Controller
                 [
                     'nilai' => $nilai,
                     'sub_kriteria_id' => $subKriteria->id,
-                ]
+                ],
             );
         }
 
         return back()->with('success', 'Penilaian berhasil disimpan.');
     }
+
+
+
 
     public function update(Request $request, $karyawan_id)
     {
@@ -134,38 +128,25 @@ class PenilaianKaryawanController extends Controller
             $nilai = null;
 
             if (strtolower($kriteria->nama) === 'keterlambatan') {
-                $totalMenit = Absensi::where('karyawan_id', $karyawan->id)
-                    ->whereMonth('tanggal', $bulan)
-                    ->whereYear('tanggal', $tahun)
-                    ->sum('keterlambatan');
+                $totalMenit = Absensi::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('keterlambatan');
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $totalMenit)
-                    ->where('max_value', '>=', $totalMenit)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $totalMenit)->where('max_value', '>=', $totalMenit)->first();
 
                 $nilai = $subKriteria ? $subKriteria->bobot : 0;
-            } else if (strtolower($kriteria->nama) === 'lembur') {
-                $totalJam = Lembur::where('karyawan_id', $karyawan->id)
-                    ->whereMonth('tanggal', $bulan)
-                    ->whereYear('tanggal', $tahun)
-                    ->sum('total_jam');
+            } elseif (strtolower($kriteria->nama) === 'lembur') {
+                $totalJam = Lembur::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('total_jam');
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $totalJam)
-                    ->where('max_value', '>=', $totalJam)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $totalJam)->where('max_value', '>=', $totalJam)->first();
 
                 $nilai = $subKriteria ? $subKriteria->bobot : 0;
             } else {
-                if (!isset($validated['penilaian'][$kriteria_id])) continue;
+                if (!isset($validated['penilaian'][$kriteria_id])) {
+                    continue;
+                }
 
                 $nilaiInput = $validated['penilaian'][$kriteria_id];
 
-                $subKriteria = $kriteria->subKriterias()
-                    ->where('min_value', '<=', $nilaiInput)
-                    ->where('max_value', '>=', $nilaiInput)
-                    ->first();
+                $subKriteria = $kriteria->subKriterias()->where('min_value', '<=', $nilaiInput)->where('max_value', '>=', $nilaiInput)->first();
 
                 $nilai = $nilaiInput;
             }
@@ -184,20 +165,26 @@ class PenilaianKaryawanController extends Controller
                 [
                     'nilai' => $nilai,
                     'sub_kriteria_id' => $subKriteria->id,
-                ]
+                ],
             );
         }
 
         return back()->with('success', 'Penilaian berhasil diperbarui.');
     }
 
-
-
-    public function destroy($karyawan_id)
+    public function destroy($karyawan_id, Request $request)
     {
-        PenilaianKaryawan::where('karyawan_id', $karyawan_id)->delete();
-        return back()->with('success', 'Penilaian karyawan berhasil dihapus.');
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+
+        PenilaianKaryawan::where('karyawan_id', $karyawan_id)->where('bulan', $bulan)->where('tahun', $tahun)->delete();
+
+        return back()->with('success', 'Penilaian karyawan bulan ' . $bulan . ' tahun ' . $tahun . ' berhasil dihapus.');
     }
+
+
+
+
 
 
     public function rekapKeterlambatanBulanan($bulan, $tahun)
@@ -210,16 +197,9 @@ class PenilaianKaryawanController extends Controller
         $karyawans = Karyawan::all();
 
         foreach ($karyawans as $karyawan) {
-            $totalMenit = Absensi::where('karyawan_id', $karyawan->id)
-                ->whereMonth('tanggal', $bulan)
-                ->whereYear('tanggal', $tahun)
-                ->sum('keterlambatan');
+            $totalMenit = Absensi::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('keterlambatan');
 
-
-            $subKriteria = SubKriteria::where('kriteria_id', $kriteria->id)
-                ->where('min_value', '<=', $totalMenit)
-                ->where('max_value', '>=', $totalMenit)
-                ->first();
+            $subKriteria = SubKriteria::where('kriteria_id', $kriteria->id)->where('min_value', '<=', $totalMenit)->where('max_value', '>=', $totalMenit)->first();
 
             $nilai = $subKriteria ? $subKriteria->bobot : 0;
 
@@ -228,11 +208,11 @@ class PenilaianKaryawanController extends Controller
                     'karyawan_id' => $karyawan->id,
                     'kriteria_id' => $kriteria->id,
                     'bulan' => $bulan,
-                    'tahun' => $tahun
+                    'tahun' => $tahun,
                 ],
                 [
-                    'nilai' => $nilai
-                ]
+                    'nilai' => $nilai,
+                ],
             );
         }
 
@@ -249,16 +229,9 @@ class PenilaianKaryawanController extends Controller
         $karyawans = Karyawan::all();
 
         foreach ($karyawans as $karyawan) {
-            $totalMenit = Lembur::where('karyawan_id', $karyawan->id)
-                ->whereMonth('tanggal', $bulan)
-                ->whereYear('tanggal', $tahun)
-                ->sum('Lembur');
+            $totalMenit = Lembur::where('karyawan_id', $karyawan->id)->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('Lembur');
 
-
-            $subKriteria = SubKriteria::where('kriteria_id', $kriteria->id)
-                ->where('min_value', '<=', $totalMenit)
-                ->where('max_value', '>=', $totalMenit)
-                ->first();
+            $subKriteria = SubKriteria::where('kriteria_id', $kriteria->id)->where('min_value', '<=', $totalMenit)->where('max_value', '>=', $totalMenit)->first();
 
             $nilai = $subKriteria ? $subKriteria->bobot : 0;
 
@@ -267,11 +240,11 @@ class PenilaianKaryawanController extends Controller
                     'karyawan_id' => $karyawan->id,
                     'kriteria_id' => $kriteria->id,
                     'bulan' => $bulan,
-                    'tahun' => $tahun
+                    'tahun' => $tahun,
                 ],
                 [
-                    'nilai' => $nilai
-                ]
+                    'nilai' => $nilai,
+                ],
             );
         }
 

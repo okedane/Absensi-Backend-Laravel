@@ -19,8 +19,8 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">Daftar Kriteria</h4>
-                            <button type="button" class=" waves-effect waves-light"
-                                data-bs-toggle="modal" data-bs-target="#myModal">
+                            <button type="button" class=" waves-effect waves-light" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 <i class="mdi mdi-plus me-1"></i> Tambah Kriteria
                             </button>
                         </div>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered dt-responsive nowrap w-100">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                     <thead>
                         <tr>
                             <th style="width:20px">No</th>
@@ -46,7 +46,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->kode }}</td>
                                 <td>{{ $item->nama }}</td>
-                                <td>{{ (float) $item->bobot * 1 == (int) $item->bobot ? (int) $item->bobot : rtrim(rtrim(number_format($item->bobot, 2, '.', ''), '0'), '.') }}%</td>
+                                <td>{{ (float) $item->bobot * 1 == (int) $item->bobot ? (int) $item->bobot : rtrim(rtrim(number_format($item->bobot, 2, '.', ''), '0'), '.') }}%
+                                </td>
                                 <td>{{ $item->sifat }}</td>
                                 <td style="text-align: center; width: 100px;">
                                     <div class="d-flex justify-content-center gap-2">
@@ -134,6 +135,15 @@
                                                             @method('PUT')
                                                             <div class="modal-body">
 
+                                                                <div class="mb-3">
+                                                                    <label class="form-label" for="nama">Code
+                                                                        Kriteria</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="kode" name="kode"
+                                                                        value="{{ $item->nama }}" required>
+                                                                    <div class="invalid-feedback">Code harus
+                                                                        diisi.</div>
+                                                                </div>
                                                                 <!-- Nama -->
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
@@ -145,19 +155,11 @@
                                                                         diisi.</div>
                                                                 </div>
 
-                                                                <div class="mb-3">
-                                                                    <label class="form-label" for="nama">Code
-                                                                        Kriteria</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="kode" name="kode"
-                                                                        value="{{ $item->nama }}" required>
-                                                                    <div class="invalid-feedback">Code harus
-                                                                        diisi.</div>
-                                                                </div>
+
 
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
-                                                                        for="nama">Nama</label>
+                                                                        for="bobot">Bobot</label>
                                                                     <input type="text" class="form-control"
                                                                         id="bobot" name="bobot"
                                                                         value="{{ $item->bobot }}" required>
@@ -220,20 +222,21 @@
                                     <form class="needs-validation" action="{{ route('kriteria.post') }}"
                                         method="POST" novalidate>
                                         @csrf
-                                        <div class="mb-3">
-                                            <label class="form-label" for="validationCustom01">Nama</label>
-                                            <input type="text" class="form-control" id="validationCustom01"
-                                                placeholder="Masukan Nama" name="nama" required>
-                                            <div class="invalid-feedback">
-                                                Nama harus diisi
-                                            </div>
-                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">Code</label>
                                             <input type="text" class="form-control" id="validationCustom01"
                                                 placeholder="Masukan Code" name="kode" required>
                                             <div class="invalid-feedback">
                                                 Code harus diisi
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="validationCustom01">Nama</label>
+                                            <input type="text" class="form-control" id="validationCustom01"
+                                                placeholder="Masukan Nama" name="nama" required>
+                                            <div class="invalid-feedback">
+                                                Nama harus diisi
                                             </div>
                                         </div>
 
@@ -257,11 +260,8 @@
                                             <div class="invalid-feedback">sifat harus diisi</div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary waves-effect"
-                                                data-bs-dismiss="modal">Tutup</button>
-                                            <button type="submit"
-                                                class="btn btn-primary waves-effect waves-light">Simpan
-                                                Perubahan</button>
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
                                         </div>
                                     </form>
 

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kriteria_id')->constrained()->onDelete('cascade');
             $table->string('nama');
-            $table->integer('min_value')->nullable(); // misal: 0
-            $table->integer('max_value')->nullable(); // misal: 15
-            $table->integer('bobot'); // misal: 1.0
+            $table->integer('min_value')->nullable(); 
+            $table->integer('max_value')->nullable(); 
+            $table->integer('bobot');
             $table->timestamps();
         });
     }

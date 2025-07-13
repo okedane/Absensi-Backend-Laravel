@@ -189,7 +189,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <!-- Delete Modal -->
                                                     <div class="modal fade" id="deleteDetailModal{{ $jadwal->id }}" tabindex="-1">
                                                         <div class="modal-dialog">

@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                     <thead>
                         <tr>
                             <th style="width:20px">No</th>
@@ -162,8 +162,8 @@
         </div>
         <!-- end cardaa -->
     </div> <!-- end col -->
-    </div>
-    </div>
+    {{-- </div>
+    </div> --}}
     <div class="row">
         <div class="col-lg-6">
             <div class="card-body">
@@ -189,17 +189,19 @@
                                                 Nama harus diisi
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                        <div class="modal-footer">
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div> <!-- end preview-->
-
             </div><!-- end card-body -->
         </div><!-- end card -->
     </div>
+
 
 </x-app>

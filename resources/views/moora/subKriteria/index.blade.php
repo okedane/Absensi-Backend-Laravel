@@ -7,7 +7,7 @@
                         <h4 class="mb-sm-0 font-size-18">Sub Kriteria</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('kriteria.index') }}">kriteria</a></li>
                                 <li class="breadcrumb-item active">Sub Kriteria</li>
                             </ol>
                         </div>
@@ -29,14 +29,13 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered dt-responsive nowrap w-100">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                     <thead>
                         <tr>
                             <th style="width:20px">No</th>
                             <th>Nama</th>
                             <th>Bobot</th>
-                            {{-- <th>Min value</th>
-                            <th>Max value</th> --}}
+
                             <th style="text-align: center; width: 100px;" class="no-export">Action</th>
                         </tr>
                     </thead>
@@ -46,8 +45,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->bobot }}</td>
-                                {{-- <td>{{ $item->min_value }}</td>
-                                <td>{{ $item->max_value }}</td> --}}
+
                                 <td style="text-align: center; width: 100px;">
                                     <div class="d-flex justify-content-center gap-2">
 
@@ -251,11 +249,8 @@
                                         </div>
                                         <input type="hidden" name="kriteria_id" value="{{ $kriteria->id }}">
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary waves-effect"
-                                                data-bs-dismiss="modal">Tutup</button>
-                                            <button type="submit"
-                                                class="btn btn-primary waves-effect waves-light">Simpan
-                                                Perubahan</button>
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
                                         </div>
                                     </form>
                                 </div>

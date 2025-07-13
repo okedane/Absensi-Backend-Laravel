@@ -10,7 +10,6 @@ class Karyawan extends Model
     use HasFactory;
     protected $fillable = [
         'nomor_karyawan',
-        'tanggal_masuk',
         'user_id',
         'jabatan_id',
     ];
@@ -56,4 +55,10 @@ class Karyawan extends Model
             'lokasi_id'
         );
     }
+
+     public function penilaians()
+    {
+        return $this->hasMany(PenilaianKaryawan::class);
+    }
+
 }

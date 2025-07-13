@@ -21,48 +21,67 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form method="GET" action="{{ route('izin.index') }}" class="row g-3">
-                                <div class="col-md-3">
-                                    {{-- <label for="jabatan" class="form-label">Filter Jabatan</label> --}}
-                                    <select name="jabatan" id="jabatan" class="form-select">
-                                        <option value="">Semua Jabatan</option>
-                                        @foreach($jabatans as $jabatan)
-                                            <option value="{{ $jabatan->id }}" 
-                                                {{ $sortJabatan == $jabatan->id ? 'selected' : '' }}>
-                                                {{ $jabatan->nama_jabatan }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            <form method="GET" action="{{ route('izin.index') }}"
+                                class="row g-3 mb-4 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="jabatan" class="form-label fw-semibold">Jabatan</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="mdi mdi-account-tie"></i>
+                                        </span>
+                                        <select name="jabatan" id="jabatan" class="form-select">
+                                            <option value="">Semua Jabatan</option>
+                                            @foreach ($jabatans as $jabatan)
+                                                <option value="{{ $jabatan->id }}"
+                                                    {{ $sortJabatan == $jabatan->id ? 'selected' : '' }}>
+                                                    {{ $jabatan->nama_jabatan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    {{-- <label for="bulan" class="form-label">Filter Bulan</label> --}}
-                                    <select name="bulan" id="bulan" class="form-select">
-                                        <option value="">Semua Bulan</option>
-                                        @foreach($bulans as $key => $bulan)
-                                            <option value="{{ $key }}" 
-                                                {{ $sortBulan == $key ? 'selected' : '' }}>
-                                                {{ $bulan }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+
+                                <div class="col-md-4">
+                                    <label for="bulan" class="form-label fw-semibold">Bulan</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="mdi mdi-calendar-month"></i>
+                                        </span>
+                                        <select name="bulan" id="bulan" class="form-select">
+                                            <option value="">Semua Bulan</option>
+                                            @foreach ($bulans as $key => $bulan)
+                                                <option value="{{ $key }}"
+                                                    {{ $sortBulan == $key ? 'selected' : '' }}>
+                                                    {{ $bulan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                    <a href="{{ route('izin.index') }}" class="btn btn-secondary">Reset</a>
+
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100 me-2">
+                                        <i class="mdi mdi-filter-variant"></i> Filter
+                                    </button>
+                                    <a href="{{ route('izin.index') }}" class="btn btn-secondary w-100">
+                                        <i class="mdi mdi-refresh"></i> Reset
+                                    </a>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Alert Success -->
-            @if(session('success'))
+            @if (session('success'))
                 <div class="row mb-3">
                     <div class="col-12">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
                         </div>
                     </div>
                 </div>
@@ -91,17 +110,23 @@
                                             <td class="align-middle text-center">{{ $loop->iteration }}</td>
                                             <td class="align-middle">{{ $item->karyawan->user->name }}</td>
                                             <td class="align-middle">
-                                                <span class="badge badge-soft-secondary">
+                                                <span class="badge bg-secondary">
                                                     {{ $item->karyawan->jabatan->nama_jabatan }}
                                                 </span>
                                             </td>
-                                            <td class="align-middle">{{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d F Y') }}</td>
-                                            <td class="align-middle">{{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d F Y') }}</td>
+                                            <td class="align-middle">
+                                                {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d F Y') }}</td>
+                                            <td class="align-middle">
+                                                {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d F Y') }}
+                                            </td>
                                             <td class="align-middle">
                                                 @php
-                                                    $durasi = \Carbon\Carbon::parse($item->tanggal_mulai)->diffInDays(\Carbon\Carbon::parse($item->tanggal_selesai)) + 1;
+                                                    $durasi =
+                                                        \Carbon\Carbon::parse($item->tanggal_mulai)->diffInDays(
+                                                            \Carbon\Carbon::parse($item->tanggal_selesai),
+                                                        ) + 1;
                                                 @endphp
-                                                <span class="badge badge-soft-info">{{ $durasi }} hari</span>
+                                                <span class="badge bg-info">{{ $durasi }} hari</span>
                                             </td>
                                             <td class="align-middle">
                                                 @if ($item->status == 'pending')
@@ -114,14 +139,18 @@
                                             </td>
                                             <td class="align-middle text-center" style="width: 120px;">
                                                 @if ($item->status == 'pending')
-                                                    <form action="{{ route('izin.updateStatus', $item->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('izin.updateStatus', $item->id) }}"
+                                                        method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <!-- Hidden inputs untuk mempertahankan filter -->
-                                                        <input type="hidden" name="jabatan" value="{{ $sortJabatan }}">
-                                                        <input type="hidden" name="status" value="{{ $sortStatus }}">
-                                                        <input type="hidden" name="bulan" value="{{ $sortBulan }}">
-                                                        
+                                                        <input type="hidden" name="jabatan"
+                                                            value="{{ $sortJabatan }}">
+                                                        <input type="hidden" name="status"
+                                                            value="{{ $sortStatus }}">
+                                                        <input type="hidden" name="bulan"
+                                                            value="{{ $sortBulan }}">
+
                                                         <button name="status" value="disetujui"
                                                             class="btn btn-success btn-sm mb-1" title="Setujui"
                                                             onclick="return confirm('Apakah Anda yakin ingin menyetujui izin ini?')">

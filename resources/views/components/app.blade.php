@@ -32,6 +32,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     {{-- <script>
         const routes = {
             usersIndex: "{{ route('users.index') }}",
@@ -40,6 +44,86 @@
         };
     </script> --}}
 </head>
+<style>
+    .map-container {
+        height: 400px;
+        width: 100%;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .coordinates-display {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+    }
+
+    .coordinate-value {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .location-buttons {
+        margin-bottom: 20px;
+    }
+
+    .location-buttons .btn {
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+
+    .radius-circle {
+        fill-opacity: 0.2;
+        stroke-width: 2;
+    }
+
+    .page-title-box {
+        padding: 20px 0;
+    }
+
+    .breadcrumb {
+        background: none;
+        padding: 0;
+    }
+
+    .card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .btn-soft-primary {
+        color: #556ee6;
+        background-color: rgba(85, 110, 230, 0.1);
+        border-color: transparent;
+    }
+
+    .btn-soft-danger {
+        color: #f46a6a;
+        background-color: rgba(244, 106, 106, 0.1);
+        border-color: transparent;
+    }
+
+    .marker-popup {
+        font-size: 14px;
+    }
+
+    .current-location-marker {
+        background-color: #007bff;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+</style>
 
 <body>
     <div id="layout-wrapper">
@@ -107,6 +191,90 @@
             };
         </script>
     @endif
+
+    {{-- <script>
+        // Fungsi toggle mata
+        function setupPasswordToggle(inputId, buttonId, iconId) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(buttonId);
+            const icon = document.getElementById(iconId);
+
+            button.addEventListener('click', function() {
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                icon.classList.toggle('mdi-eye-outline', !isPassword);
+                icon.classList.toggle('mdi-eye-off-outline', isPassword);
+            });
+        }
+
+        // Jalankan toggle password
+        setupPasswordToggle('current_password', 'toggleCurrent', 'iconCurrent');
+        setupPasswordToggle('password1', 'togglePassword1', 'toggleIcon1');
+        setupPasswordToggle('password2', 'togglePassword2', 'toggleIcon2');
+
+        // Validasi konfirmasi password
+        document.getElementById('submitBtn').addEventListener('click', function(e) {
+            const password = document.getElementById('password1').value;
+            const confirmPassword = document.getElementById('password2').value;
+            const confirmInput = document.getElementById('password2');
+            const confirmError = document.getElementById('confirmError');
+
+            if (password !== confirmPassword) {
+                e.preventDefault(); // hentikan submit
+                confirmInput.classList.add('is-invalid');
+                confirmError.style.display = 'block';
+            } else {
+                confirmInput.classList.remove('is-invalid');
+                confirmError.style.display = 'none';
+            }
+        });
+    </script> --}}
+
+    <script>
+        // Fungsi toggle mata
+        function setupPasswordToggle(inputId, buttonId, iconId) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(buttonId);
+            const icon = document.getElementById(iconId);
+
+            if (input && button && icon) {
+                button.addEventListener('click', function() {
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    icon.classList.toggle('mdi-eye-outline', !isPassword);
+                    icon.classList.toggle('mdi-eye-off-outline', isPassword);
+                });
+            }
+        }
+
+        // Jalankan toggle untuk semua password field
+        setupPasswordToggle('current_password', 'toggleCurrent', 'iconCurrent');
+        setupPasswordToggle('password1', 'togglePassword1', 'toggleIcon1');
+        setupPasswordToggle('password2', 'togglePassword2', 'toggleIcon2');
+
+        // Validasi konfirmasi password saat submit
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', function(e) {
+                const password = document.getElementById('password1')?.value;
+                const confirmPassword = document.getElementById('password2')?.value;
+                const confirmInput = document.getElementById('password2');
+                const confirmError = document.getElementById('confirmError');
+
+                if (password !== confirmPassword) {
+                    e.preventDefault(); // hentikan submit
+                    if (confirmInput) confirmInput.classList.add('is-invalid');
+                    if (confirmError) confirmError.style.display = 'block';
+                } else {
+                    if (confirmInput) confirmInput.classList.remove('is-invalid');
+                    if (confirmError) confirmError.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+
+
 
     {{-- <script>
         function handleSearch(event) {

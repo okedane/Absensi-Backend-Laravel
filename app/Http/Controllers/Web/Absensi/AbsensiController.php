@@ -16,7 +16,6 @@ class AbsensiController extends Controller
         $sortJabatan = $request->get('jabatan');
         $sortBulan = $request->get('bulan');
         
-        // Query untuk mendapatkan data karyawan yang unik dengan jumlah absensi
         $query = DB::table('absensis')
             ->join('karyawans', 'absensis.karyawan_id', '=', 'karyawans.id')
             ->join('users', 'karyawans.user_id', '=', 'users.id')
@@ -33,17 +32,14 @@ class AbsensiController extends Controller
             )
             ->groupBy('karyawans.id', 'karyawans.nomor_karyawan', 'users.name', 'jabatans.nama_jabatan');
 
-        // Filter berdasarkan jabatan jika dipilih
         if ($sortJabatan) {
             $query->where('jabatans.id', $sortJabatan);
         }
 
-        // Filter berdasarkan bulan jika dipilih
         if ($sortBulan) {
             $query->whereMonth('absensis.tanggal', $sortBulan);
         }
 
-        // Urutkan berdasarkan jabatan
         $query->orderBy('jabatans.nama_jabatan');
 
         $absensis = $query->get();

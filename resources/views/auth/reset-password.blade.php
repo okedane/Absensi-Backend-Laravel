@@ -1,5 +1,4 @@
 <x-login.layout>
-
     <div class="row g-0">
         <div class="col-xxl-3 col-lg-4 col-md-5">
             <div class="auth-full-page-content d-flex p-sm-5 p-4">

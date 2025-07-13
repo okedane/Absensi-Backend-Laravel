@@ -35,7 +35,7 @@
                         <li>
                             <a href="{{ route('lokasi-absensi.index') }}">
                                 <i data-feather="map-pin"></i>
-                                Maps Kantor
+                                Lokasi Restoran
                             </a>
                         </li>
                         <li>
@@ -87,7 +87,7 @@
                         <li>
                             <a href="{{ route('jabatanHasil') }}">
                                 <i data-feather="activity"></i>
-                                Rumus
+                                Perhitungan
                             </a>
                         </li>
                         <li>

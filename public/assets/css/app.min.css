@@ -905,6 +905,7 @@ body[data-sidebar=dark] #sidebar-menu ul li ul.sub-menu li a:hover {
     color: var(--bs-sidebar-dark-menu-item-hover-color)
 }
 
+/* coba */
 body[data-sidebar=dark][data-sidebar-size=sm][data-topbar=dark] #vertical-menu-btn {
     color: #e9ecef
 }
@@ -1568,6 +1569,7 @@ body[data-layout=horizontal][data-layout-size=boxed] .navbar-header {
     --bs-header-bg: #fff;
     --bs-header-item-color: var(--bs-header-item-color);
     --bs-header-item-sub-color: var(--bs-secondary-color);
+    /* Background sideBar */
     --bs-sidebar-bg: #fbfaff;
     --bs-sidebar-menu-item-color: #545a6d;
     --bs-sidebar-menu-sub-item-color: #545a6d;

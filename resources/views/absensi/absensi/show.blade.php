@@ -17,40 +17,41 @@
             </div>
 
             <!-- Info Karyawan -->
-            @if($karyawan)
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <strong>Nomor Karyawan:</strong><br>
-                                    {{ $karyawan->nomor_karyawan }}
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>Nama:</strong><br>
-                                    {{ $karyawan->user->name }}
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>Jabatan:</strong><br>
-                                    {{ $karyawan->jabatan->nama_jabatan }}
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>Total Absensi:</strong><br>
-                                    <span class="badge badge-soft-primary font-size-12">{{ $absensis->count() }}</span>
+            @if ($karyawan)
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Nomor Karyawan:</strong><br>
+                                        {{ $karyawan->nomor_karyawan }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Nama:</strong><br>
+                                        {{ $karyawan->user->name }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Jabatan:</strong><br>
+                                        {{ $karyawan->jabatan->nama_jabatan }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Total Absensi:</strong><br>
+                                        <span
+                                            class="badge badge-soft-primary font-size-12">{{ $absensis->count() }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
 
             <!-- Tombol Kembali -->
             <div class="row mb-3">
                 <div class="col-12">
-                    <a href="{{ route('absensi.index') }}?{{ http_build_query(request()->only(['jabatan', 'bulan'])) }}" 
-                       class="btn btn-secondary">
+                    <a href="{{ route('absensi.index') }}?{{ http_build_query(request()->only(['jabatan', 'bulan'])) }}"
+                        class="btn btn-secondary">
                         <i class="mdi mdi-arrow-left"></i> Kembali
                     </a>
                 </div>
@@ -71,7 +72,6 @@
                                         <th>Status</th>
                                         <th>Keterlambatan</th>
                                         <th>Jadwal Kerja</th>
-                                        <th>Keterangan Izin</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,41 +80,38 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
                                             <td>
-                                                <span class="badge {{ $item->shift == 'pagi' ? 'badge-soft-primary' : 'badge-soft-secondary' }}">
+                                                <span
+                                                    class="badge {{ $item->shift == 'pagi' ? 'badge bg-primary' : 'badge bg-secondary' }}">
                                                     {{ ucfirst($item->shift) }}
                                                 </span>
                                             </td>
-                                            <td>{{ $item->jam_absen ? \Carbon\Carbon::parse($item->jam_absen)->format('H:i') : '-' }}</td>
+                                            <td>{{ $item->jam_absen ? \Carbon\Carbon::parse($item->jam_absen)->format('H:i') : '-' }}
+                                            </td>
                                             <td>
-                                                @if($item->status == 'tepat waktu')
-                                                    <span class="badge badge-soft-success">Tepat Waktu</span>
+                                                @if ($item->status == 'tepat waktu')
+                                                    <span class="badge bg-success">Tepat Waktu</span>
                                                 @elseif($item->status == 'terlambat')
-                                                    <span class="badge badge-soft-warning">Terlambat</span>
+                                                    <span class="badge bg-warning">Terlambat</span>
                                                 @else
-                                                    <span class="badge badge-soft-info">Izin</span>
+                                                    <span class="badge bg-info">Izin</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($item->keterlambatan)
+                                                @if ($item->keterlambatan)
                                                     <span class="text-danger">{{ $item->keterlambatan }} menit</span>
                                                 @else
                                                     -
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($item->jadwal_kerja)
-                                                    {{ $item->jadwal_kerja->jam_masuk }} - {{ $item->jadwal_kerja->jam_keluar }}
+                                                @if ($item->jadwalKerja)
+                                                    {{ $item->jadwalKerja->jam_masuk }} -
+                                                    {{ $item->jadwalKerja->jam_keluar }}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($item->izin)
-                                                    {{ $item->izin->keterangan ?? 'Izin' }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
+                                           
                                         </tr>
                                     @empty
                                         <tr>

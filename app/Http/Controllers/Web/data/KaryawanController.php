@@ -18,21 +18,44 @@ class KaryawanController extends Controller
         return view('data.karyawa.index', compact('karyawan', 'jabatan'));
     }
 
+    private function generateNomorKaryawan()
+    {
+        // Ambil nomor terbesar dari kolom 'nomor_karyawan'
+        $last = Karyawan::orderBy('nomor_karyawan', 'desc')->first();
+
+        if (!$last || !$last->nomor_karyawan) {
+            return 'KRY001';
+        }
+
+        // Ambil angka dari belakang string (KRY028 -> 28)
+        $lastNumber = (int) substr($last->nomor_karyawan, 3);
+
+        // Langsung ambil nomor berikutnya tanpa cek exists
+        $newNumber = $lastNumber + 1;
+
+        // Format dengan 3 digit
+        $nomorBaru = 'KRY' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        return $nomorBaru;
+    }
+
+
+
+
     public function store(Request $request)
     {
         try {
-
             $validated = $request->validate([
-                'nomor_karyawan' => 'required|unique:karyawans,nomor_karyawan',
-                // 'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'tanggal_masuk' => 'required|date',
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
+                'password' => 'required|min:6|confirmed',
                 'jabatan_id' => 'required|exists:jabatans,id',
             ]);
 
+            // Generate nomor karyawan otomatis
+            $nomorKaryawan = $this->generateNomorKaryawan();
 
+            // Simpan user
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -40,9 +63,9 @@ class KaryawanController extends Controller
                 'role' => 'karyawan',
             ]);
 
-
+            // Simpan karyawan
             Karyawan::create([
-                'nomor_karyawan' => $request->nomor_karyawan,
+                'nomor_karyawan' => $nomorKaryawan,
                 'tanggal_masuk' => $request->tanggal_masuk,
                 'jabatan_id' => $request->jabatan_id,
                 'user_id' => $user->id,
@@ -50,27 +73,30 @@ class KaryawanController extends Controller
 
             return redirect()->back()->with('success', 'Karyawan berhasil ditambahkan');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan Karyawan. Silakan coba lagi. ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan Karyawan. ' . $th->getMessage());
         }
     }
+
 
 
     public function update(Request $request, $id)
     {
         try {
             $validated = $request->validate([
-                'nomor_karyawan' => 'required|unique:karyawans,nomor_karyawan',
+                // 'nomor_karyawan' => 'required|unique:karyawans,nomor_karyawan,' . $id,
                 'name'          => 'required|string|max:255',
                 'email'         => 'required|email|unique:users,email,' . $request->user_id,
                 'password'      => 'nullable|min:6',
             ]);
 
             $karyawan = Karyawan::findOrFail($id);
+
+            // Update nomor_karyawan (jika diubah)
             $karyawan->update([
                 'nomor_karyawan' => $validated['nomor_karyawan'],
-                'tanggal_masuk' => $validated['tanggal_masuk'],
             ]);
 
+            // Update user
             $user = $karyawan->user;
             $user->email = $validated['email'];
             $user->name = $validated['name'];
@@ -84,6 +110,7 @@ class KaryawanController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data. ' . $th->getMessage());
         }
     }
+
 
 
 

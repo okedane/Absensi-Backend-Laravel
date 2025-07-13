@@ -11,10 +11,7 @@
                                     class="logo-txt">Melita</span>
                             </a>
                         </div>
-                        {{-- <div class="mb-4 text-center">
-                            <img src="{{ asset('assets/images/favicon.ico') }}" alt="Logo Melita" height="200"
-                                class="auth-logo">
-                        </div> --}}
+
                         <div class="auth-content my-auto">
                             <div class="text-center">
                                 <h5 class="mb-0">Welcome Back !</h5>
@@ -36,12 +33,6 @@
                                         <div class="flex-grow-1">
                                             <label class="form-label">Password</label>
                                         </div>
-                                        <div class="flex-shrink-0">
-                                            <div class="">
-                                                <a href="{{ route('forgot') }}" class="text-muted">Forgot
-                                                    password?</a>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="input-group auth-pass-inputgroup">
                                         <input type="password"
@@ -56,23 +47,26 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="row mb-4">
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="remember-check">
-                                            <label class="form-check-label" for="remember-check">
-                                                Remember me
-                                            </label>
-                                        </div>
+                                <div class="">
+                                    <div class="">
+                                        <a href="{{ route('forgot') }}" class="text-muted">Forgot password?</a>
                                     </div>
                                 </div>
+                                <hr>
                                 <div class="mb-3">
-                                    <button class="btn w-100 waves-effect waves-light" type="submit" style="background-color: #ff797a; border-color: #ff797a; color: #fff;">
+                                    <button class="btn w-100 waves-effect waves-light" type="submit"
+                                        style="background-color: #ff797a; border-color: #ff797a; color: #fff;">
                                         Log In
+                                    </button>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-outline-secondary w-100" type="reset">
+                                        Reset
                                     </button>
                                 </div>
                             </form>
                         </div>
+
                         <div class="mt-4 mt-md-5 text-center">
                             <p class="mb-0">©
                                 <script>

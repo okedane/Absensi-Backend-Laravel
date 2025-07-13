@@ -28,10 +28,12 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                                 <tr>
                                     <th style="width:20px">No</th>
+
+                                    <th>Nomor Admin</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th style="text-align: center; width: 100px;" class="no-export">Action</th>
@@ -42,6 +44,7 @@
                                 @foreach ($users as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->profile->nomor_admin ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td style="text-align: center; width: 100px;">
@@ -59,8 +62,8 @@
 
                                                     <!-- Tombol Delete -->
                                                     <!-- Tombol Delete dengan Modal Konfirmasi -->
-                                                    <form action="{{ route('users.destroy', $item->id) }}" method="POST"
-                                                        id="deleteForm{{ $item->id }}">
+                                                    <form action="{{ route('users.destroy', $item->id) }}"
+                                                        method="POST" id="deleteForm{{ $item->id }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button" style="padding: 3px 6px;"
@@ -149,7 +152,7 @@
                                                                                 Please choose a unique and valid email.
                                                                             </div>
                                                                         </div>
-                                                                        <div class="mb-3">
+                                                                        {{-- <div class="mb-3">
                                                                             <label class="form-label"
                                                                                 for="validationCustom03">Password</label>
                                                                             <input type="password"
@@ -157,16 +160,14 @@
                                                                                 id="validationCustom03"
                                                                                 placeholder="Password"
                                                                                 name="password">
-                                                                        </div>
+                                                                        </div> --}}
 
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button"
-                                                                            class="btn btn-secondary waves-effect"
-                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        {{-- <button type="reset" --}}
+                                                                            {{-- class="btn btn-secondary">Reset</button> --}}
                                                                         <button type="submit"
-                                                                            class="btn btn-primary waves-effect waves-light">Save
-                                                                            changes</button>
+                                                                            class="btn btn-primary">Simpan</button>
                                                                     </div>
                                                                 </form>
 
@@ -205,8 +206,8 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form class="needs-validation" action="{{ route('users.store') }}" method="POST"
-                                        novalidate>
+                                    <form class="needs-validation" action="{{ route('users.store') }}"
+                                        method="POST" novalidate>
                                         @csrf
                                         <div class="mb-3">
                                             <label class="form-label" for="validationCustom01">Name</label>
@@ -225,20 +226,42 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="validationCustom03">Password</label>
-                                            <input type="password" class="form-control" id="validationCustom03"
-                                                placeholder="Password" name="password" required>
+                                            <label class="form-label" for="password1">Password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password1"
+                                                    placeholder="Masukkan Password" name="password" required>
+
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    id="togglePassword1">
+                                                    <i class="mdi mdi-eye-outline" id="toggleIcon1"></i>
+                                                </button>
+                                            </div>
                                             <div class="invalid-feedback">
-                                                Password must be at least 8 characters long.
+                                                Password harus diisi
+                                            </div>
+                                        </div>
+
+                                        <!-- Konfirmasi Password -->
+                                        <div class="mb-3">
+                                            <label class="form-label" for="password2">Konfirmasi Password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password2"
+                                                    placeholder="Masukkan Ulang Password" name="password_confirmation"
+                                                    required>
+
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    id="togglePassword2">
+                                                    <i class="mdi mdi-eye-outline" id="toggleIcon2"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Password harus diisi
                                             </div>
                                         </div>
                                         <input type="hidden" name="role" id="role" value="admin">
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary waves-effect"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="submit"
-                                                class="btn btn-primary waves-effect waves-light">Save
-                                                changes</button>
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
                                         </div>
                                     </form>
 

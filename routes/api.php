@@ -5,6 +5,7 @@ use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Absensi\AbsensiController;
 use App\Http\Controllers\API\Absensi\IzinController;
 use App\Http\Controllers\Api\Absensi\LemburController;
+use App\Http\Controllers\Api\Auth\ChangePasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::post('/verify-code', [AuthController::class, 'apiVerifyCode']);
 Route::post('/reset-password', [AuthController::class, 'apiResetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/change-password', [ChangePasswordController::class, 'changePassword']);
     Route::get('/user', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     //Jadwal

@@ -20,7 +20,7 @@ class AbsensiController extends Controller
             'longitude' => 'required|numeric',
         ]);
 
-        // Ambil jadwal kerja hari ini
+
         $jadwal = JadwalKerja::with('lokasi')
             ->where('karyawan_id', $karyawan->id)
             ->whereDate('tanggal', Carbon::today())
@@ -33,7 +33,7 @@ class AbsensiController extends Controller
             ], 404);
         }
 
-        // Validasi sudah absen?
+
         $sudahAbsen = Absensi::where('karyawan_id', $karyawan->id)
             ->whereDate('tanggal', Carbon::today())
             ->where('shift', $jadwal->shift)
@@ -46,7 +46,6 @@ class AbsensiController extends Controller
             ], 409);
         }
 
-        // Validasi lokasi
         $userLat = $request->latitude;
         $userLong = $request->longitude;
 
@@ -64,38 +63,56 @@ class AbsensiController extends Controller
             ], 403);
         }
 
-        // Hitung keterlambatan
-        $toleransi = 15; // menit
-        $jamMasuk = Carbon::createFromTimeString($jadwal->jam_masuk);
-        $batasToleransi = $jamMasuk->copy()->addMinutes($toleransi);
+        // Validasi waktu absen
         $waktuSekarang = Carbon::now();
-
-        if ($waktuSekarang->lte($batasToleransi)) {
-            $status = 'tepat waktu';
-            $keterlambatan = 0;
-        } else {
-            $status = 'terlambat';
-            $keterlambatan = $waktuSekarang->diffInMinutes($batasToleransi) + 1;
+        $jamMasuk = Carbon::createFromFormat('H:i:s', $jadwal->jam_masuk);
+        $jamKeluar = Carbon::createFromFormat('H:i:s', $jadwal->jam_keluar);
+        $bolehAbsenMulai = $jamMasuk->copy()->subHour();
+        if ($waktuSekarang->lt($bolehAbsenMulai)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Absen hanya diperbolehkan mulai 1 jam sebelum jam masuk.',
+                'jam_masuk' => $jadwal->jam_masuk,
+                'waktu_boleh_absen' => $bolehAbsenMulai->format('H:i:s'),
+                'waktu_sekarang' => $waktuSekarang->format('H:i:s'),
+            ], 403);
         }
 
 
-        // Simpan absensi
-        $absen = Absensi::create([
-            'karyawan_id'    => $karyawan->id,
+        $status = 'tepat waktu';
+        $keterlambatan = null;
+
+        //greater than
+        if ($waktuSekarang->gt($jamMasuk)) {
+            $status = 'terlambat';
+            $keterlambatan = $waktuSekarang->diffInMinutes($jamMasuk); // ⬅️ hasil integer, cocok untuk kolom integer
+        }
+
+
+
+        Absensi::create([
+            'karyawan_id' => $karyawan->id,
             'jadwal_kerja_id' => $jadwal->id,
-            'tanggal'        => Carbon::today(),
-            'shift'          => $jadwal->shift,
-            'jam_absen'      => $waktuSekarang->format('H:i:s'),
-            'status'         => $status,
-            'keterlambatan'  => $keterlambatan,
+            'tanggal' => Carbon::today()->toDateString(),
+            'shift' => $jadwal->shift,
+            'jam_absen' => $waktuSekarang->format('H:i:s'),
+            'status' => $status,
+            'keterlambatan' => $keterlambatan,
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Absensi berhasil dicatat.',
-            'data' => $absen
+            'message' => 'Absen berhasil dicatat',
+            'data' => [
+                'status' => $status,
+                'jam_absen' => $waktuSekarang->format('H:i:s'),
+                'keterlambatan' => $keterlambatan
+            ]
         ]);
     }
+
+
+
 
     public function index(Request $request)
     {
@@ -116,17 +133,15 @@ class AbsensiController extends Controller
     // Fungsi hitung jarak (Haversine formula)
     private function hitungJarak($lat1, $lon1, $lat2, $lon2)
     {
-        $earthRadius = 6371000; // meter
+        $earthRadius = 6371000; // Radius Bumi
         $dLat = deg2rad($lat2 - $lat1);
         $dLon = deg2rad($lon2 - $lon1);
 
-        $a = sin($dLat / 2) ** 2 +
-            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-            sin($dLon / 2) ** 2;
+        $a = sin($dLat / 2) ** 2 + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) ** 2;
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-        return $earthRadius * $c; // hasil meter
+        return $earthRadius * $c;
     }
 
 
@@ -143,7 +158,6 @@ class AbsensiController extends Controller
             ], 404);
         }
 
-        // Ambil semua absensi, urutkan dari terbaru
         $absensi = $karyawan->absensis()
             ->with(['jadwalKerja', 'izin'])
             ->orderBy('tanggal', 'desc')

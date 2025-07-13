@@ -14,6 +14,7 @@ use App\Http\Controllers\Web\Data\KaryawanController;
 use App\Http\Controllers\Web\Moora\KriteriaController;
 use App\Http\Controllers\Web\Moora\MooraController;
 use App\Http\Controllers\Web\Moora\SubKriteriaController;
+use App\Http\Controllers\Web\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/jabatan/{id_jabatan}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaian.byJabatan');
         Route::get('/jabatan/filter/{jabatan_id}', [PenilaianKaryawanController::class, 'tampilkanKaryawanByJabatan'])->name('penilaianKaryawan.filter');
         Route::post('/store', [PenilaianKaryawanController::class, 'store'])->name('penilaianKaryawan.post');
-        Route::put('/update/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaian.update');
+        Route::put('/update/{id}', [PenilaianKaryawanController::class, 'update'])->name('penilaianKaryawan.update');
         Route::delete('/delete/{id}', [PenilaianKaryawanController::class, 'destroy'])->name('penilaianKaryawan.delete');
         Route::get('/rekap-keterlambatan/{bulan}/{tahun}', [PenilaianKaryawanController::class, 'rekapKeterlambatanBulanan'])->name('penilaianKaryawan.rekapKeterlambatan');
     });
@@ -147,8 +148,16 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('moora')->group(function () {
         Route::get('/jabatanPeringkat', [MooraController::class, 'pilihJabatan'])->name('jabatanHasil');
         Route::get('/moora/hasil/{jabatan_id}', [MooraController::class, 'hasil'])->name('moora.hasil');
+        Route::get('/moora/peringkat/{jabatan_id}/cetak-semua', [MooraController::class, 'cetakPerhitunganPDF'])->name('moora.cetakPerhitunganPDF');
+
 
         Route::get('/jabatanhasul', [MooraController::class, 'pilihJabatanAkhir'])->name('JabatanHasilAKhir');
         Route::get('/moora/peringkat/{jabatan_id}', [MooraController::class, 'hasilAkhir'])->name('moora.hasilAKhir');
+        Route::get('/moora/peringkat/{jabatan_id}/cetak', [MooraController::class, 'cetakPDF'])->name('moora.cetakPDF');
     });
+    Route::get('/admin/password', [ProfileController::class, 'showChangePassword'])->name('admin.password.form');
+    Route::post('/admin/password', [ProfileController::class, 'updatePassword'])->name('admin.password.update');
+
+
+
 });

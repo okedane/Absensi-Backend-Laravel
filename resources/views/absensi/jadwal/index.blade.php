@@ -49,10 +49,11 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4 d-flex align-items-end">
+                                <div class="col-md-4 d-flex align-items-end gap-2">
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="mdi mdi-filter-variant"></i> Filter
                                     </button>
+                                    <a href="{{ route('jadwal-kerja.index') }}" class="btn btn-secondary w-100">Reset</a>
                                 </div>
                             </form>
 
@@ -98,14 +99,14 @@
                                                         <i class="mdi mdi-eye font-size-16 align-middle"></i>
                                                     </a>
 
-                                                    <!-- Tombol Edit -->
+                                                    {{-- <!-- Tombol Edit -->
                                                     <button type="button"
                                                         data-bs-target="#editModal{{ $item->id }}"
                                                         data-bs-toggle="modal"
                                                         class="btn btn-soft-primary waves-effect waves-light"
                                                         style="padding: 3px 6px;" title="Edit">
                                                         <i class="mdi mdi-pencil font-size-16 align-middle"></i>
-                                                    </button>
+                                                    </button> --}}
 
                                                     <!-- Tombol Hapus -->
                                                     <form action="{{ route('jadwal-kerja.delete', $item->id) }}"
@@ -358,7 +359,10 @@
                             <input type="time" class="form-control" id="jam_keluar" name="jam_keluar" required>
                             <div class="invalid-feedback">Jam keluar harus diisi.</div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -8,7 +8,7 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('jabatanHasil') }}">Jabatan</a></li>
                                 <li class="breadcrumb-item active">moora</li>
                             </ol>
                         </div>
@@ -17,9 +17,10 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                   
-                    <form method="GET" action="{{ route('moora.hasil', $jabatan_id) }}" class="row g-3 align-items-center mb-4">
-                        <div class="col-md-3">
+
+                    <form method="GET" action="{{ route('moora.hasil', $jabatan_id) }}"
+                        class="row g-3 align-items-center mb-4">
+                        <div class="col-md-4">
                             <label for="bulan" class="form-label mb-1">Bulan</label>
                             <select name="bulan" id="bulan" class="form-select" required>
                                 @for ($i = 1; $i <= 12; $i++)
@@ -29,7 +30,7 @@
                                 @endfor
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="tahun" class="form-label mb-1">Tahun</label>
                             <select name="tahun" id="tahun" class="form-select" required>
                                 @for ($y = now()->year; $y >= 2020; $y--)
@@ -46,6 +47,11 @@
                             <a href="{{ route('moora.hasil', $jabatan_id) }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-clockwise"></i> Reset
                             </a>
+                            <a href="{{ route('moora.cetakPerhitunganPDF', ['jabatan_id' => $jabatan_id, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
+                                target="_blank" class="btn btn-success">
+                                <i class="bi bi-printer"></i> Cetak PDF
+                            </a>
+
                         </div>
                     </form>
                     @if (!empty($matriksKeputusan))
@@ -66,7 +72,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data['nama_karyawan'] }}</td>
                                         @foreach ($data['keputusan'] as $bobot)
-                                            <td>{{ $bobot }}</td>
+                                            <td>
+                                                {{ fmod($bobot, 1) == 0 ? (int) $bobot : number_format($bobot, 2) }}
+                                            </td>
                                         @endforeach
                                     </tr>
                                 @endforeach
@@ -154,8 +162,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $data['nama_karyawan'] }}</td>
-                                    <td>{{ number_format($data['max'],  9, ',', '') }}</td>
-                                    <td>{{ number_format($data['min'],  9, ',', '') }}</td>
+                                    <td>{{ number_format($data['max'], 9, ',', '') }}</td>
+                                    <td>{{ number_format($data['min'], 9, ',', '') }}</td>
                                     <td>{{ $data['yi'] }}</td>
                                 </tr>
                             @endforeach

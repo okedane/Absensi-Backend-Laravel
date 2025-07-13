@@ -26,10 +26,10 @@ class IzinController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tanggal_mulai' => 'required|date',
+            'tanggal_mulai'   => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'jenis_izin' => 'required|in:sakit,cuti,lainnya',
-            'alasan' => 'nullable|string',
+            'jenis_izin'      => 'required|in:sakit,cuti,izin,dispensasi,lainnya',
+            'alasan'          => 'nullable|string',
         ]);
 
         $karyawanId = $request->user()->karyawan->id;
@@ -58,12 +58,12 @@ class IzinController extends Controller
 
         // Simpan izin jika aman
         $izin = Izin::create([
-            'karyawan_id' => $karyawanId,
-            'tanggal_mulai' => $validated['tanggal_mulai'],
-            'tanggal_selesai' => $validated['tanggal_selesai'],
-            'jenis_izin' => $validated['jenis_izin'],
-            'alasan' => $validated['alasan'] ?? null,
-            'status' => 'pending',
+            'karyawan_id'       => $karyawanId,
+            'tanggal_mulai'     => $validated['tanggal_mulai'],
+            'tanggal_selesai'   => $validated['tanggal_selesai'],
+            'jenis_izin'        => $validated['jenis_izin'],
+            'alasan'            => $validated['alasan'] ?? null,
+            'status'            => 'pending',
         ]);
 
         return response()->json([
@@ -77,10 +77,10 @@ class IzinController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'jenis_izin' => 'required|in:sakit,cuti,lainnya',
-            'alasan' => 'nullable|string',
+            'tanggal_mulai'     => 'required|date',
+            'tanggal_selesai'   => 'required|date|after_or_equal:tanggal_mulai',
+            'jenis_izin'        => 'required|in:sakit,cuti,izin,dispen,lainnya',
+            'alasan'            => 'nullable|string',
         ]);
 
         $izin = Izin::where('id', $id)

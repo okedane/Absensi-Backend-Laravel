@@ -31,6 +31,9 @@ $(document).ready(function () {
         }
       },
       "colvis"
+    ],
+    columnDefs: [
+      { targets: -1, orderable: false } // ✅ nonaktifkan sorting di kolom Action
     ]
   }).buttons().container()
     .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");

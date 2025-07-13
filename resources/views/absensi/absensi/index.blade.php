@@ -60,7 +60,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th style="width:20px">No</th>
@@ -82,16 +82,16 @@
                                             <td>{{ $item->nama_karyawan }}</td>
                                             <td>{{ $item->nama_jabatan }}</td>
                                             <td>
-                                                <span class="badge badge-soft-primary">{{ $item->total_absensi }}</span>
+                                                <span class="badge bg-primary">{{ $item->total_absensi }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-soft-success">{{ $item->tepat_waktu }}</span>
+                                                <span class="badge bg-success">{{ $item->tepat_waktu }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-soft-warning">{{ $item->terlambat }}</span>
+                                                <span class="badge bg-warning">{{ $item->terlambat }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-soft-info">{{ $item->izin }}</span>
+                                                <span class="badge bg-info">{{ $item->izin }}</span>
                                             </td>
                                             <td style="text-align: center; width: 100px;">
                                                 <div class="d-flex justify-content-center gap-2">
