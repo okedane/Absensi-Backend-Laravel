@@ -1,18 +1,7 @@
-# 🚀 SISTEM PENDUKUNG KEPUTUSAN PEMILIHAN KARYAWAN TERBAIK MENGGUNAKAN METODE MULTI OBJECTIVE OPTIMIZATION ON THE BASIC OF RATION ANALYSIS (MOORA) STUDI KASUS RESTORAN MELITA KITCHEN
-
-Proyek ini adalah Website berbasis **Laravel** untuk pemilihan karyawan terbaik.  
-Website ini mencakup fitur seperti dibawah ini.  
-Webiste ini juga sebagai backend untuk aplikasi Absensi(link github).
-
----
-### Flow System
-
-## flowchart System
 # 🚀 SPK Pemilihan Karyawan Terbaik - Metode MOORA
 ### Studi Kasus: Restoran Melita Kitchen
-
 ## 📝 Deskripsi
-Sistem Pendukung Keputusan berbasis Laravel untuk pemilihan karyawan terbaik menggunakan metode Multi Objective Optimization on the Basic of Ratio Analysis (MOORA). Sistem ini terintegrasi dengan aplikasi absensi karyawan.
+Sistem Pendukung Keputusan berbasis Laravel untuk pemilihan karyawan terbaik menggunakan metode Multi Objective Optimization on the Basic of Ratio Analysis (MOORA). Sistem ini terintegrasi dengan [aplikasi mobile absensi](https://github.com/okedane/aplikasi-absensi-flutter) untuk memudahkan proses pencatatan kehadiran karyawan.
 
 ## 🔄 Arsitektur Sistem
 
