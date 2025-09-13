@@ -96,84 +96,10 @@ Email: romadani.code@gmail.com
 Password: 12345678
 ```
 
-## 📄 License
-[MIT License](LICENSE)
+## 📄 Data Pendukung
+[file Skripsi](readme/skripsi.pdf)
 
 ## 👨‍💻 Developer
-[RomaCode]
-
-<!-- 
-## Use Case sistem 
-![Usecase Sistem](readme/usecase.png)
-
-## CDM & PDM
-![CDM](readme/cdm.png)
-![PDM](readme/pdm.png)
-## 📸 Tampilan Aplikasi
-
-### 🔑 Halaman Login
-![Login Page](readme/1_login.png)
-
-### 🔑 Halaman Reset Password
-![Reset Page](readme/2_reset.png)
-
-
-### 📊 Dashboard
-![Dashboard](readme/3_dashboard.png)
-
-### 🏬 Halaman Jabatan
-![Halaman Jabatan](readme/4_jabatan.png)
-
-### 🏬 Halaman Karyawan
-![Halaman Jabatan](readme/5_karyawan.png)
-
-### 🏬 Halaman Lokasi Resoran
-![Halaman Lokasi Restoran](readme/6_lokasi.png)
-
-### 🏬 Halaman Jadwal Absen
-![Halaman Jadwal](readme/7_jadwal.png)
-
-### 🏬 Halaman History Absensi
-![Halaman History](readme/8_history.png)
-
-### 🏬 Halaman Izin
-![Halaman Izin](readme/9_izin.png)
-
-### 🏬 Halaman Lembur
-![Halaman Lembur](readme/10_Lembur.png)
-
-### 🏬 Halaman Kriteria
-![Halaman kriteria](readme/11_kriteria.png)
-
-### 🏬 Halaman Sub Kriteria
-![Halaman SubKriteria](readme/12_subKriteria.png)
-
-### 🏬 Halaman Penilaian
-![Halaman Penilaian](readme/13_penilaian.png)
-
-### 🏬 Halaman Peringkat
-![Halaman Izin](readme/14_peringkat.png)
-
-### 🏬 Halaman Izin
-![Halaman Peringakat](readme/15_izin.png)
-
-### 🏬 Halaman Kelola Akun
-![Halaman Kelola Akun](readme/16_akunpng)
-
-
-
-## Cara Install Project
-
-1. composer install
-2. cp .env.example .env
-3. php artisan key:generate
-4. php artisan migrate
-5. php artisan migrate:fresh --seed
-
-
-## login
-admin
-email : romadani.code@gmail.com
-pw    : 12345678
-
- -->
+- Nama: RomaCode
+- GitHub: [RomaCode](https://github.com/RomaCode)
+- Email: romadani.code@gmail.com
