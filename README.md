@@ -85,7 +85,7 @@ Password: 12345678
 ```
 
 ## 📄 Data Pendukung
-[file Skripsi](readme/skripsi.pdf)
+[file Pendukung](readme/skripsi.pdf)
 
 ## 👨‍💻 Developer
 - Nama: okedane
