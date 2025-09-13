@@ -63,9 +63,9 @@ Sistem Pendukung Keputusan berbasis Laravel untuk pemilihan karyawan terbaik men
 |![Izin](readme/9_izin.png)|![Lembur](readme/10_lembur.png)|
 
 ### Penilaian
-| Kriteria | Sub Kriteria | Penilaian | Peringkat |
-|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
-|![Kriteria](readme/11_kriteria.png)|![SubKriteria](readme/12_subKriteria.png)|![Penilaian](readme/13_penilaian.png)|![Peringkat](readme/14_peringkat.png)|
+| Kriteria | Sub Kriteria | Penilaian | Perhitungan | Peringkat |
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:||:-------------------------:|
+|![Kriteria](readme/11_kriteria.png)|![SubKriteria](readme/12_subKriteria.png)|![Penilaian](readme/13_penilaian.png)|![Peringkat](readme/14_perhitunga.png)|![Peringkat](readme/15_peringkat.png)|
 
 </details>
 
