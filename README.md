@@ -60,7 +60,7 @@ Sistem Pendukung Keputusan berbasis Laravel untuk pemilihan karyawan terbaik men
 ### Pengajuan
 | Izin | Lembur |
 |:-------------------------:|:-------------------------:|
-|![Izin](readme/9_izin.png)|![Lembur](readme/10_Lembur.png)|
+|![Izin](readme/9_izin.png)|![Lembur](readme/10_lembur.png)|
 
 ### Penilaian
 | Kriteria | Sub Kriteria | Penilaian | Peringkat |
