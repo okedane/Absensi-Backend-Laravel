@@ -89,6 +89,6 @@ Password: 12345678
 [file Skripsi](readme/skripsi.pdf)
 
 ## 👨‍💻 Developer
-- Nama: RomaCode
-- GitHub: [RomaCode](https://github.com/RomaCode)
+- Nama: okedane
+- GitHub: [RomaCode]([https://github.com/RomaCode](https://github.com/okedane))
 - Email: romadani.code@gmail.com
