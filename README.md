@@ -4,11 +4,20 @@
 Sistem Pendukung Keputusan berbasis Laravel untuk pemilihan karyawan terbaik menggunakan metode Multi Objective Optimization on the Basic of Ratio Analysis (MOORA). Sistem ini terintegrasi dengan [aplikasi mobile absensi](https://github.com/okedane/aplikasi-absensi-flutter) untuk memudahkan proses pencatatan kehadiran karyawan.
 ## 🔄 Arsitektur Sistem
 
-### Flowchart System
+<!-- <details> -->
+<details>
+<summary>🔄 Flowchart System </summary>
+
 ![Flowchat sistem](readme/flowchart.png)
 
-### Use Case Diagram
+</details>
+
+<details>
+<summary>👥 Use Case Diagram </summary>
+
 ![Usecase Sistem](readme/usecase.png)
+
+</details>
 
 ### Database Design
 <details>
